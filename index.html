@@ -359,6 +359,7 @@ h1 {
     document.getElementById("title").textContent = c.title || "";
     var meta = ["<span><strong>" + fmt(start) + " " + start.getFullYear() + "</strong> to <strong>" + fmt(end) + " " + end.getFullYear() + "</strong></span>",
       "<span>Classes " + esc((c.classDays || []).join(", ")) + "</span>"];
+    if (c.location) meta.unshift("<span>Location - <strong>" + esc(c.location) + "</strong></span>");
     if (c.platform && c.platform.url) meta.push('<a href="' + esc(c.platform.url) + '" target="_blank" rel="noopener">' + esc(c.platform.name || "Learning platform") + "</a>");
     document.getElementById("meta").innerHTML = meta.join("");
 
