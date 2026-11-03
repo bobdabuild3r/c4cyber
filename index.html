@@ -385,7 +385,7 @@ h1 {
     return /^complete\s+(part|the\s+\w+\s+quiz|assessment|task|ci_|cl_)/i.test(x) ||
       (/^part\s*(\d+|[a-z])\b/i.test(x) && !/^part\s*\d+$/i.test(x)) ||
       /^task\s*\d+/i.test(x) || /^questions?\s+\d/i.test(x) ||
-      /quiz/i.test(x) || /assess\w*\s+(explanation|quiz)|submit your assess/i.test(x) || /^c[il]_cybersecproject/i.test(x) || /^documents\s+(required|to complete)/i.test(x);
+      /quiz/i.test(x) || /assess\w*\s+quiz|submit your assess/i.test(x) || /^c[il]_cybersecproject/i.test(x) || /^documents\s+(required|to complete)/i.test(x);
   }
   function renderPlain(t, unit) {
     var html = "";
@@ -405,13 +405,12 @@ h1 {
     });
     return html.replace(/<p><hr><\/p>/g, "<hr>");
   }
-  function renderText(t, unit) {
-    if (!t || !String(t).trim()) return "";
-    // Lab lines (C1T3L1 ...) always come first in a column, before links and other notes
+  // Split a column's text into plain parts and assessment-task parts (labs moved to the top first)
+  function segmentText(t) {
+    if (!t || !String(t).trim()) return [];
     var all = String(t).split("\n"), labs = all.filter(isLabLine), others = all.filter(function (l) { return !isLabLine(l); });
     if (labs.length) t = labs.join("\n") + "\n\n" + others.join("\n");
     t = t.replace(/\n\s*\n(\s*\n)+/g, "\n\n").trim();
-    // Split into plain text and assessment boxes
     var lines = t.split("\n"), segs = [], cur = null, docsMode = false;
     var nextNonBlank = function (i) { for (var j = i + 1; j < lines.length; j++) if (lines[j].trim()) return lines[j]; return ""; };
     var prevNonBlank = function (i) { for (var j = i - 1; j >= 0; j--) if (lines[j].trim()) return lines[j]; return ""; };
@@ -419,22 +418,32 @@ h1 {
       var x = l.trim(), inA = cur && cur.type === "a";
       if (!x) { if (inA && !docsMode && !isAssessStart(nextNonBlank(i), "")) { cur = null; } else if (cur) cur.lines.push(""); return; }
       if (isOtherItem(x)) { if (inA) { cur = null; docsMode = false; } }
-      else if (!inA && isAssessStart(x, nextNonBlank(i), prevNonBlank(i))) { cur = { type: "a", lines: [] }; segs.push(cur); docsMode = /^documents\s+(required|to complete)/i.test(x); }
+      else if (!inA && isAssessStart(x, nextNonBlank(i), prevNonBlank(i))) {
+        var a = { type: "a", lines: [] };
+        // a heading line directly above the task (no blank line between) belongs with it, e.g. "Fundamentals of Cyber" + "Part 1: Presentation in class"
+        var prev = lines[i - 1];
+        if (cur && cur.type === "p" && prev && prev.trim() && !isOtherItem(prev)) a.lines.push(cur.lines.pop());
+        cur = a; segs.push(cur); docsMode = /^documents\s+(required|to complete)/i.test(x);
+      }
       if (!cur || (cur.type === "a" && isOtherItem(x))) { cur = { type: "p", lines: [] }; segs.push(cur); }
       cur.lines.push(l);
     });
+    return segs.filter(function (sg) { return sg.lines.join("").trim(); });
+  }
+  // Render segments; boxes=false shows assessment parts as plain text
+  function renderSegs(segs, unit, boxes) {
     var html = "";
     segs.forEach(function (sg) {
       var body = sg.lines.join("\n").trim();
       if (!body) return;
-      if (sg.type === "p") { html += renderPlain(body, unit); return; }
+      if (sg.type === "p" || !boxes) { html += renderPlain(body, unit); return; }
       var info = assessInfo(unit);
-      html += '<div class="assess"><div class="assess-h"><span>Assessment task</span>' + (info ? '<span class="assess-unit">' + esc(info.name) + "</span>" : "") +
-        (info && info.url ? '<a href="' + esc(info.url) + '" target="_blank" rel="noopener">Documents ↗</a>' : "") + "</div>" +
+      html += '<div class="assess"><div class="assess-h"><span>Assessment task</span>' + (info ? '<span class="assess-unit">' + esc(info.name) + "</span>" : "") + "</div>" +
         body.split(/\n\s*\n/).map(function (b) { return "<p>" + b.split("\n").map(function (q) { return linkify(q.trim()); }).filter(Boolean).join("<br>") + "</p>"; }).join("") + "</div>";
     });
     return html;
   }
+  function renderText(t, unit) { return renderSegs(segmentText(t), unit, false); }
   // Every "Topic N ..." line delivered that day becomes part of the bold heading; the rest stays in the Topics column
   function splitTopics(t) {
     var heads = [], rest = [], part = "";
@@ -628,9 +637,13 @@ h1 {
           var heads = s.title ? [s.title].concat(tp.heads.filter(function (h) { return h !== s.title && /^Topic/i.test(h); })) : tp.heads;
           var topicsHtml = (heads.length ? '<h3 class="s-title">' + heads.map(esc).join("<br>") + "</h3>" : "") + (tp.rest ? '<div class="txt">' + renderText(tp.rest, s.unit) + "</div>" : "");
           cols = '<div><div class="col-h">Topics</div>' + topicsHtml + "</div>";
-          [["In class", s.activities], ["Extra / home task", s.homework]].forEach(function (p) {
-            var has = p[1] && String(p[1]).trim();
-            cols += '<div' + (has ? "" : ' class="col-empty"') + '><div class="col-h">' + p[0] + '</div>' + (has ? '<div class="txt">' + renderText(p[1], s.unit) + "</div>" : '<div class="txt" style="color:var(--muted)">—</div>') + "</div>";
+          // Assessment tasks: boxed only in Extra / home task; tasks written under In class move there. Not for Automate Pentesting or Cyber Project.
+          var boxUnit = ["automate", "project", "general"].indexOf(s.unit) < 0;
+          var inSegs = segmentText(s.activities), homeSegs = segmentText(s.homework);
+          if (boxUnit) { homeSegs = homeSegs.concat(inSegs.filter(function (x) { return x.type === "a"; })); inSegs = inSegs.filter(function (x) { return x.type !== "a"; }); }
+          [["In class", renderSegs(inSegs, s.unit, false)], ["Extra / home task", renderSegs(homeSegs, s.unit, boxUnit)]].forEach(function (p) {
+            var has = !!p[1];
+            cols += '<div' + (has ? "" : ' class="col-empty"') + '><div class="col-h">' + p[0] + '</div>' + (has ? '<div class="txt">' + p[1] + "</div>" : '<div class="txt" style="color:var(--muted)">—</div>') + "</div>";
           });
           body += '<article class="session' + (hl ? " hl" : "") + '"' + (hl ? ' id="now"' : "") + ' data-unit="' + esc(s.unit) + '">' + dayCell(d) + "<div>" +
             '<div class="s-head"><span class="unit-tag" style="--c:' + unitColor(s.unit) + '">' + esc(unitName(s.unit)) + "</span>" +
