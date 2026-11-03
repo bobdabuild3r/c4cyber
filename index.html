@@ -72,6 +72,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 
 /* Header */
 .masthead { display: grid; gap: 12px; padding-bottom: 18px; }
+.topline { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px; }
+.ver { font: 400 11px/1 var(--f-mono); color: var(--muted); opacity: .8; font-variant-numeric: tabular-nums; }
 .eyebrow { font: 600 12px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 h1 {
   margin: 0; font-family: var(--f-display); font-weight: 800; font-stretch: 78%;
@@ -281,7 +283,7 @@ h1 {
 <!--BODY-START-->
 <div class="wrap">
   <header class="masthead">
-    <div class="eyebrow" id="intake">Loading schedule…</div>
+    <div class="topline"><div class="eyebrow" id="intake">Loading schedule…</div><div class="ver" id="ver"></div></div>
     <h1 id="title">Cert IV in Cyber Security</h1>
     <div class="meta" id="meta"></div>
     <div class="progress" id="progress" hidden>
@@ -404,6 +406,7 @@ h1 {
     var classDays = (c.classDays || ["Mon", "Tue", "Thu"]).map(function (d) { return DOW.indexOf(d); });
 
     document.getElementById("intake").textContent = c.intake || "";
+    if (data.version) { var vu = data.updated ? parseDate(data.updated) : null; document.getElementById("ver").textContent = "v" + data.version + (vu ? " · updated " + vu.getDate() + " " + MON[vu.getMonth()] + " " + vu.getFullYear() : ""); }
     document.getElementById("title").textContent = c.title || "";
     var meta = ["<span><strong>" + fmt(start) + " " + start.getFullYear() + "</strong> to <strong>" + fmt(end) + " " + end.getFullYear() + "</strong></span>",
       "<span>Classes " + esc((c.classDays || []).join(", ")) + "</span>"];

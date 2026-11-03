@@ -31,7 +31,7 @@ All content lives in `schedule.json`. The page (`index.html`) never needs editin
 | Holiday breaks (no teaching week) | `"breaks"` |
 | Course start/end, reminder text, platform link | `"course"` |
 | OneDrive folders for a unit | `"units"` → `"labsFolder"`, `"assessmentFolder"` |
-| "Last updated" note at the bottom | `"updated"` |
+| Version note at the top | `"version"` (raise it on every change, e.g. `1.0` → `1.1`) and `"updated"` |
 
 - An optional `"note"` on an assessment shows under the due date.
 - In text, use `\n` for a new line. The file already does this, so copy an existing line's style.
