@@ -30,6 +30,7 @@ All content lives in `schedule.json`. The page (`index.html`) never needs editin
 | Public holidays | `"holidays"` |
 | Holiday breaks (no teaching week) | `"breaks"` |
 | Course start/end, reminder text, platform link | `"course"` |
+| Readable names for web links | `"linkNames"`: the link address and the name to show |
 | OneDrive folders for a unit | `"units"` → `"labsFolder"`, `"assessmentFolder"` |
 | Version note at the top | `"version"` (raise it on every change, e.g. `1.0` → `1.1`) and `"updated"` |
 

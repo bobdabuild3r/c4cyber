@@ -272,6 +272,13 @@ h1 {
 }
 
 .is-hidden { display: none !important; }
+.to-top {
+  position: fixed; z-index: 6; cursor: pointer;
+  right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  border: 0; border-radius: 99px; padding: 11px 16px; background: var(--ink); color: var(--bg);
+  font: 600 14px/1 var(--f-body); box-shadow: 0 6px 18px -6px rgba(0, 0, 0, .45);
+}
+.to-top:hover { background: var(--accent); color: var(--accent-ink); }
 .notice { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; margin-top: 18px; }
 .notice.err { border-color: var(--holiday); }
 .notice code { font-family: var(--f-mono); font-size: 13px; }
@@ -319,6 +326,7 @@ h1 {
   </section>
 
   <p class="foot" id="foot"></p>
+  <button class="to-top" id="to-top" type="button" aria-label="Back to top" hidden><span aria-hidden="true">↑</span> Top</button>
 </div>
 
 <script>
@@ -341,12 +349,13 @@ h1 {
   var today = new Date(); today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   try { var q = new URLSearchParams(location.search).get("today"); if (q && /^\d{4}-\d{2}-\d{2}$/.test(q)) today = parseDate(q); } catch (e) {}
 
+  var linkNames = {}; // URL -> readable name, from "linkNames" in schedule.json
   function linkify(line) {
     var out = "", last = 0, re = /https?:\/\/[^\s)]+/g, m;
     while ((m = re.exec(line))) {
       out += esc(line.slice(last, m.index));
-      var url = m[0], label = url.replace(/^https?:\/\/(www\.)?/, "");
-      if (label.length > 48) label = label.slice(0, 45) + "…";
+      var url = m[0], label = linkNames[url] || linkNames[url.replace(/\/$/, "")];
+      if (!label) { label = url.replace(/^https?:\/\/(www\.)?/, ""); if (label.length > 48) label = label.slice(0, 45) + "…"; }
       out += '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(label) + "</a>";
       last = m.index + url.length;
     }
@@ -354,6 +363,11 @@ h1 {
   }
   function renderText(t, unit) {
     if (!t || !String(t).trim()) return "";
+    // Lab lines (C1T3L1 ...) always come first in a column, before links and other notes
+    var isLab = function (l) { return /^C\dT\d+L\d+/.test(l.trim()); };
+    var all = String(t).split("\n"), labs = all.filter(isLab), others = all.filter(function (l) { return !isLab(l); });
+    if (labs.length) t = labs.join("\n") + "\n\n" + others.join("\n");
+    t = t.replace(/\n\s*\n(\s*\n)+/g, "\n\n").trim();
     var html = "";
     String(t).split(/\n\s*\n/).forEach(function (b) {
       var lines = b.split("\n").map(function (l) { return l.trim(); }).filter(Boolean);
@@ -412,6 +426,7 @@ h1 {
     // Link to the unit's OneDrive folder (set "folder" on a unit in schedule.json); nothing shows until it is set
     // OneDrive links per unit: "labsFolder" and "assessmentFolder" in schedule.json (buttons stay hidden until set)
     var folderUrl = function (id, key) { var u = units[id], v = u && u[key || "labsFolder"]; return /^https:\/\//.test(v || "") ? v : ""; };
+    linkNames = data.linkNames || {};
     thmRooms = {}; Object.keys(data.tryhackme || {}).forEach(function (k) { if (/^https:\/\//.test(data.tryhackme[k])) thmRooms[normRoom(k)] = data.tryhackme[k]; });
     labFolders = (data.units || []).filter(function (u) { return folderUrl(u.id); }).map(function (u) { return { unit: u.id, prefix: u.labPrefix || "", url: folderUrl(u.id) }; });
     var folderLink = function (id, label, key) { var f = folderUrl(id, key); return f ? '<a class="folder-link" href="' + esc(f) + '" target="_blank" rel="noopener">' + label + ' <span aria-hidden="true">↗</span></a>' : ""; };
@@ -640,6 +655,17 @@ h1 {
     if (curBtn) { var s = document.getElementById("strip"); s.scrollLeft = curBtn.offsetLeft - s.clientWidth / 2 + curBtn.clientWidth / 2; }
     if (location.hash !== "#due" && current && today >= start) requestAnimationFrame(function () { goWeek(current, false); });
   }
+
+  // Back to top button: shows once the page is scrolled down
+  (function () {
+    var tt = document.getElementById("to-top");
+    var update = function () { tt.hidden = window.scrollY < 500; };
+    window.addEventListener("scroll", update, { passive: true }); update();
+    tt.addEventListener("click", function () {
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+    });
+  })();
 
   function showError(msg) { document.getElementById("weeks").innerHTML = '<div class="notice err"><strong>The schedule could not be loaded.</strong><p>' + msg + "</p></div>"; }
 
