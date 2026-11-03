@@ -59,6 +59,10 @@
       "name": "Easter Monday"
     },
     {
+      "date": "2027-04-26",
+      "name": "ANZAC Day (additional public holiday)"
+    },
+    {
       "date": "2027-06-14",
       "name": "King's Birthday"
     }
@@ -90,7 +94,8 @@
     {
       "title": "Network and Web Pentesting: Project and Quiz",
       "unit": "pentest",
-      "due": "2027-04-04"
+      "due": "2027-04-06",
+      "note": "Due the evening of the catch-up day"
     },
     {
       "title": "BSBWHS309 Contribute effectively to WHS communication and consultation processes",
@@ -98,14 +103,14 @@
       "due": "2027-04-11"
     },
     {
-      "title": "Automate Pentesting: Project and Quiz",
-      "unit": "automate",
-      "due": "2027-05-23"
-    },
-    {
       "title": "VU23223 Apply cyber security legislation, privacy and ethical practices",
       "unit": "wit",
       "due": "2027-05-23"
+    },
+    {
+      "title": "Automate Pentesting: Project and Quiz",
+      "unit": "automate",
+      "due": "2027-05-30"
     },
     {
       "title": "Cyber Project: Project and Quiz",
@@ -306,20 +311,14 @@
     },
     {
       "date": "2027-04-06",
-      "unit": "automate",
-      "topics": "Topic 1- Introduction to pentesting techniques and automation tools\n\nExplanation of Unit Automate Pentesting\n\nVulnerability Management\nVulnerabilty Scanning\nCVSS\nAPT & TTP\nATT&CK Framework (Navigator)\nCyber Kill Chain\nZero Trust Networking",
-      "activities": "C4T01L1_ClientMWDefense",
-      "homework": "Vulnerabilites 101 (TryHackMe)\nIntro to Cyber Threat Intel (TryHackMe)\nCyber Scotland 2021 (TryHackMe)\nPython Basics (TryHackMe)\nPython Tutorial (W3schools)"
+      "unit": "general",
+      "title": "Assessment catch-up day",
+      "topics": "",
+      "activities": "",
+      "homework": ""
     },
     {
       "date": "2027-04-08",
-      "unit": "project",
-      "topics": "Topic 1: Information and security policies",
-      "activities": "Part 1: Undertake research and develop a project plan\n\nTask 1: Undertake research and write a draft research report",
-      "homework": "SOC L1 Alert Reporting (TryHackMe)"
-    },
-    {
-      "date": "2027-04-26",
       "unit": "project",
       "topics": "Topic 2: Establish project team",
       "activities": "Part 1: Undertake research and develop a project plan\n\nTask 2: Seek feedback on draft research report  (Cl_CyberSecProject_Pro2of2_Appx_Email1_Research_Report_Submission)",
@@ -328,9 +327,9 @@
     {
       "date": "2027-04-27",
       "unit": "automate",
-      "topics": "Topic 2:  Advanced pentesting tools\n\nSearchsploit\nMetasploit\nFile transfer (Wget & Python server)\nNessus",
-      "activities": "C4T02L1_VulnExploits\nC4T02L2_NessusInfoGather\n\nCyber Challenge_8 (Optional)",
-      "homework": "Nessus (TryHackMe)\nPython Tutorial (W3schools)"
+      "topics": "Topic 1- Introduction to pentesting techniques and automation tools\n\nExplanation of Unit Automate Pentesting\n\nVulnerability Management\nVulnerabilty Scanning\nCVSS\nAPT & TTP\nATT&CK Framework (Navigator)\nCyber Kill Chain\nZero Trust Networking",
+      "activities": "C4T01L1_ClientMWDefense",
+      "homework": "Vulnerabilites 101 (TryHackMe)\nIntro to Cyber Threat Intel (TryHackMe)\nCyber Scotland 2021 (TryHackMe)\nPython Basics (TryHackMe)\nPython Tutorial (W3schools)"
     },
     {
       "date": "2027-04-29",
@@ -349,9 +348,9 @@
     {
       "date": "2027-05-04",
       "unit": "automate",
-      "topics": "Topic 3: Introduction to automation (Part 1)",
-      "activities": "C4T03L1_AlgoFlowCharts\nC4T03L2_LoopsConds\nC4T03L3_SimpleScript",
-      "homework": "Part 1 Task 1 – Collaborate with Others to Establish Problem Guidelines\nPart 1 Task 2 – Design abstract script, flowchart, and algorithm"
+      "topics": "Topic 2:  Advanced pentesting tools\n\nSearchsploit\nMetasploit\nFile transfer (Wget & Python server)\nNessus",
+      "activities": "C4T02L1_VulnExploits\nC4T02L2_NessusInfoGather\n\nCyber Challenge_8 (Optional)",
+      "homework": "Nessus (TryHackMe)\nPython Tutorial (W3schools)"
     },
     {
       "date": "2027-05-06",
@@ -370,9 +369,9 @@
     {
       "date": "2027-05-11",
       "unit": "automate",
-      "topics": "Topic 3: Introduction to automation (Part 2)",
+      "topics": "Topic 3: Introduction to automation (Part 1)",
       "activities": "C4T03L1_AlgoFlowCharts\nC4T03L2_LoopsConds\nC4T03L3_SimpleScript",
-      "homework": "Part 1 Task 3 – Run the Script and Check the Outcome and Documentation\nPart 1 Task 4 – Share script output and seek feedback"
+      "homework": "Part 1 Task 1 – Collaborate with Others to Establish Problem Guidelines\nPart 1 Task 2 – Design abstract script, flowchart, and algorithm"
     },
     {
       "date": "2027-05-13",
@@ -391,9 +390,9 @@
     {
       "date": "2027-05-18",
       "unit": "automate",
-      "topics": "Topic 4: Basic manual enumeration & Privilege escalation\n\nTypes of Exploit\nLinPeas\nLinEnum\nSUID\nSudoers file exploit\nStabiilising Shell\n\nTopic 5: Documenting and reporting",
-      "activities": "C4T04L1_ExploitShells\nC4T04L3_LinuxPrivEsc\n\nsudo security bypass (TryHackMe)\nBolt (TryHackMe)\n\nCyber Challenge_1 (Optional)",
-      "homework": "Part 2 Task 1 – Manual exploitation and privilege exploitation\nPart 2 Task 2 – Apply common technologies to defend workstations"
+      "topics": "Topic 3: Introduction to automation (Part 2)",
+      "activities": "C4T03L1_AlgoFlowCharts\nC4T03L2_LoopsConds\nC4T03L3_SimpleScript",
+      "homework": "Part 1 Task 3 – Run the Script and Check the Outcome and Documentation\nPart 1 Task 4 – Share script output and seek feedback"
     },
     {
       "date": "2027-05-20",
@@ -411,10 +410,10 @@
     },
     {
       "date": "2027-05-25",
-      "unit": "project",
-      "topics": "Topic 9: Prepare for the IRT exercise",
-      "activities": "Part 3: Execute the IRP/T Project\n\nTask 1: Undertake detailed research into Gelos cyber security systems\nTask 2: Develop an Incident Response Plan (IRP) - Blue team Playbook",
-      "homework": "CI_CyberSecProject_AE_Pro2of2_Appx_IncidentResponsePlanTemplate"
+      "unit": "automate",
+      "topics": "Topic 4: Basic manual enumeration & Privilege escalation\n\nTypes of Exploit\nLinPeas\nLinEnum\nSUID\nSudoers file exploit\nStabiilising Shell\n\nTopic 5: Documenting and reporting",
+      "activities": "C4T04L1_ExploitShells\nC4T04L3_LinuxPrivEsc\n\nsudo security bypass (TryHackMe)\nBolt (TryHackMe)\n\nCyber Challenge_1 (Optional)",
+      "homework": "Part 2 Task 1 – Manual exploitation and privilege exploitation\nPart 2 Task 2 – Apply common technologies to defend workstations"
     },
     {
       "date": "2027-05-27",

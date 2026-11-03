@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 <style>
-/* Layout: sticky "due dates" rail beside a week-by-week timeline; one column on phones. */
+/* Layout: full-width week timeline; sticky bar with Schedule / Due dates tabs and a week strip. */
 :root {
   --bg: #eef2f6;
   --surface: #ffffff;
@@ -20,6 +20,7 @@
   --line: #d9e0e9;
   --accent: #1d4fd1;
   --accent-soft: #e3ebfd;
+  --accent-ink: #ffffff;
   --soon: #a85d00;
   --soon-soft: #fff1dc;
   --past: #8b96a4;
@@ -39,7 +40,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0e141c; --surface: #151d28; --surface-2: #1a2431; --ink: #e4eaf2; --muted: #93a1b3; --line: #2a3646;
-    --accent: #7ea2ff; --accent-soft: #1d2a47; --soon: #f0b25a; --soon-soft: #3a2a12; --past: #6b7787;
+    --accent: #7ea2ff; --accent-soft: #1d2a47; --accent-ink: #0e141c; --soon: #f0b25a; --soon-soft: #3a2a12; --past: #6b7787;
     --holiday: #f08aa2; --holiday-soft: #3a1c25;
     --u-fund: #4cc7b9; --u-pentest: #ff8a72; --u-nsda: #7ea2ff; --u-automate: #b896f5; --u-project: #e8b057; --u-wit: #8ccf78; --u-general: #93a1b3;
     color-scheme: dark;
@@ -47,25 +48,28 @@
 }
 :root[data-theme="dark"] {
   --bg: #0e141c; --surface: #151d28; --surface-2: #1a2431; --ink: #e4eaf2; --muted: #93a1b3; --line: #2a3646;
-  --accent: #7ea2ff; --accent-soft: #1d2a47; --soon: #f0b25a; --soon-soft: #3a2a12; --past: #6b7787;
+  --accent: #7ea2ff; --accent-soft: #1d2a47; --accent-ink: #0e141c; --soon: #f0b25a; --soon-soft: #3a2a12; --past: #6b7787;
   --holiday: #f08aa2; --holiday-soft: #3a1c25;
   --u-fund: #4cc7b9; --u-pentest: #ff8a72; --u-nsda: #7ea2ff; --u-automate: #b896f5; --u-project: #e8b057; --u-wit: #8ccf78; --u-general: #93a1b3;
   color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-padding-top: 150px; }
 body {
   margin: 0; background: var(--bg); color: var(--ink);
   font: 15px/1.55 var(--f-body);
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
 a { color: var(--accent); text-underline-offset: 2px; }
 a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
-.wrap { max-width: 1200px; margin: 0 auto; padding-block: 28px 64px; }
+.wrap { max-width: 1280px; margin: 0 auto; padding-block: 28px 64px; }
 
 /* Header */
-.masthead { display: grid; gap: 14px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+.masthead { display: grid; gap: 12px; padding-bottom: 18px; }
 .eyebrow { font: 600 12px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 h1 {
   margin: 0; font-family: var(--f-display); font-weight: 800; font-stretch: 78%;
@@ -79,15 +83,48 @@ h1 {
 .progress-label { font: 500 13px/1.3 var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 .progress-label b { color: var(--ink); font-weight: 600; }
 
-.reminder {
-  margin-top: 18px; padding: 10px 14px; border-radius: 8px;
-  background: var(--accent-soft); color: var(--ink); font-size: 14px;
-  display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap;
+/* Sticky bar: tabs + week strip */
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--bg); border-bottom: 1px solid var(--line);
+  display: grid; gap: 10px; padding-block: 10px;
 }
-.reminder .tag { font: 600 11px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.bar > * { min-width: 0; }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+.tab {
+  cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--muted);
+  font: 700 15px/1 var(--f-display); font-stretch: 92%; padding: 10px 14px; border-radius: 8px;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.tab:hover { color: var(--ink); background: var(--surface); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+.tab .n { font: 600 11px/1 var(--f-mono); padding: 3px 6px; border-radius: 4px; background: var(--soon-soft); color: var(--soon); }
+.tab[aria-selected="true"] .n { background: var(--soon); color: var(--surface); }
+.next-due {
+  margin-left: auto; display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  font-size: 13.5px; color: var(--ink); background: var(--soon-soft); border-radius: 8px; padding: 8px 12px;
+  text-decoration: none; min-width: 0;
+}
+.next-due b { color: var(--soon); font: 600 12px/1 var(--f-mono); text-transform: uppercase; letter-spacing: .06em; }
+.next-due:hover { outline: 1px solid var(--soon); }
+@media (max-width: 760px) { .next-due { margin-left: 0; width: 100%; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .next-due b { margin-right: 6px; } }
 
-/* Toolbar */
-.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 22px 0 6px; }
+.strip { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.wk {
+  flex: 0 0 auto; cursor: pointer; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  border-radius: 8px; padding: 6px 9px; display: grid; gap: 2px; text-align: center; min-width: 52px;
+  font-family: var(--f-mono); font-variant-numeric: tabular-nums;
+}
+.wk .a { font-size: 13px; font-weight: 600; }
+.wk .b { font-size: 10.5px; color: var(--muted); }
+.wk.past { opacity: .55; }
+.wk.has-due { box-shadow: inset 0 -3px 0 var(--soon); }
+.wk.cur { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); opacity: 1; }
+.wk.cur .b { color: var(--accent-ink); opacity: .85; }
+.wk-gap { flex: 0 0 auto; align-self: center; font: 500 10.5px/1.2 var(--f-mono); color: var(--muted); padding: 0 4px; text-align: center; max-width: 64px; }
+
+/* Filter */
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 16px 0 14px; }
 .toolbar .label { font: 600 12px/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-right: 4px; }
 .chip {
   display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
@@ -96,71 +133,45 @@ h1 {
 }
 .chip .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--muted)); }
 .chip[aria-pressed="true"] { border-color: var(--c, var(--accent)); background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--c, var(--accent)); font-weight: 600; }
-.jump {
-  margin-left: auto; cursor: pointer; border: 0; border-radius: 8px; padding: 9px 14px;
-  background: var(--accent); color: var(--surface); font: 600 13px/1 var(--f-body);
-}
-
-/* Main grid */
-.layout { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 28px; align-items: start; margin-top: 16px; }
-.layout > * { min-width: 0; }
-.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); order: 2; }
-@media (max-width: 900px) {
-  .layout { grid-template-columns: minmax(0, 1fr); }
-  .rail { position: static; order: 0; }
-  .jump { margin-left: 0; }
-}
-
-/* Due dates rail */
-.due-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
-.due-card h2 { margin: 0; padding: 14px 16px 10px; font: 800 20px/1.1 var(--f-display); font-stretch: 85%; }
-.due-list { list-style: none; margin: 0; padding: 0 8px 8px; display: grid; gap: 2px; max-height: calc(100vh - 140px); overflow: auto; }
-@media (max-width: 900px) { .due-list { max-height: none; } }
-.due-item { display: block; padding: 10px 8px; border-radius: 8px; }
-.due-item:hover { background: var(--surface-2); }
-.due-date { text-align: center; font-family: var(--f-mono); font-variant-numeric: tabular-nums; line-height: 1.1; padding-top: 2px; }
-.due-date .d { display: block; font-size: 22px; font-weight: 600; }
-.due-date .m { display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-.due-title { font-weight: 600; font-size: 14px; line-height: 1.35; }
-.due-sub { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; margin-top: 4px; font-size: 12.5px; color: var(--muted); }
-.unit-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c); margin-right: 5px; vertical-align: 1px; }
-.count { font: 600 12px/1 var(--f-mono); padding: 4px 7px; border-radius: 5px; background: var(--surface-2); color: var(--ink); font-variant-numeric: tabular-nums; }
-.due-item.soon .count { background: var(--soon-soft); color: var(--soon); }
-.due-item.today .count { background: var(--soon); color: var(--surface); }
-.due-item.past { opacity: .55; }
-.due-item.past .due-title { text-decoration: line-through; text-decoration-color: var(--past); }
-.due-item a { color: inherit; text-decoration: none; }
-.due-item a:hover .due-title { color: var(--accent); }
+.reminder { font-size: 13.5px; color: var(--muted); margin-left: auto; }
+.reminder b { color: var(--ink); font-weight: 600; }
+@media (max-width: 760px) { .reminder { margin-left: 0; } }
 
 /* Weeks */
 .weeks { display: grid; gap: 14px; }
-.week { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; scroll-margin-top: 16px; }
-.week.current { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.week { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.week.is-past { opacity: .8; }
+.week.current { border: 2px solid var(--accent); box-shadow: 0 6px 24px -12px var(--accent); opacity: 1; }
 .week > summary { list-style: none; cursor: pointer; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; padding: 14px 18px; }
 .week > summary::-webkit-details-marker { display: none; }
+.week.current > summary { background: var(--accent); color: var(--accent-ink); }
+.week.current .week-range { color: var(--accent-ink); opacity: .85; }
 .week-no { font: 800 26px/1 var(--f-display); font-stretch: 80%; letter-spacing: -.01em; }
 .week-range { font: 500 13px/1 var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 .week-flags { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; align-items: center; }
 .flag { font: 600 11px/1 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; padding: 5px 8px; border-radius: 5px; }
-.flag.now { background: var(--accent); color: var(--surface); }
+.flag.now { background: var(--accent-ink); color: var(--accent); }
 .flag.due { background: var(--soon-soft); color: var(--soon); }
 .flag.hol { background: var(--holiday-soft); color: var(--holiday); }
-.chev { width: 10px; height: 10px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); margin-left: 4px; transition: transform .15s; align-self: center; }
+.chev { width: 10px; height: 10px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; opacity: .6; transform: rotate(45deg); margin-left: 4px; transition: transform .15s; align-self: center; }
 .week[open] .chev { transform: rotate(-135deg); }
 .week-body { border-top: 1px solid var(--line); }
 
-.session { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 16px; padding: 16px 18px; border-top: 1px solid var(--line); }
+.session { position: relative; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 18px; padding: 18px 20px; border-top: 1px solid var(--line); }
 .session:first-child { border-top: 0; }
+.session.hl { background: var(--accent-soft); }
+.session.hl::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--accent); }
 .day { font-family: var(--f-mono); font-variant-numeric: tabular-nums; line-height: 1.15; }
 .day .dow { display: block; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-.day .dnum { display: block; font-size: 24px; font-weight: 600; }
+.day .dnum { display: block; font-size: 26px; font-weight: 600; }
 .day .dmon { display: block; font-size: 12px; color: var(--muted); }
-.session.is-today .day .dnum { color: var(--accent); }
+.session.hl .day .dnum, .session.hl .day .dow { color: var(--accent); }
+.s-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .unit-tag { display: inline-flex; align-items: center; gap: 6px; font: 600 12px/1 var(--f-mono); letter-spacing: .04em; text-transform: uppercase; color: var(--c); }
 .unit-tag::before { content: ""; width: 9px; height: 9px; border-radius: 2px; background: var(--c); }
-.today-pill { font: 600 11px/1 var(--f-mono); text-transform: uppercase; letter-spacing: .06em; background: var(--accent); color: var(--surface); padding: 4px 6px; border-radius: 4px; margin-left: 8px; }
-.s-title { margin: 6px 0 10px; font: 700 18px/1.25 var(--f-display); font-stretch: 92%; text-wrap: balance; }
-.cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.pill { font: 600 11px/1 var(--f-mono); text-transform: uppercase; letter-spacing: .06em; background: var(--accent); color: var(--accent-ink); padding: 5px 7px; border-radius: 4px; }
+.s-title { margin: 6px 0 12px; font: 700 19px/1.25 var(--f-display); font-stretch: 92%; text-wrap: balance; }
+.cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
 .cols > div { min-width: 0; }
 .col-h { font: 600 11px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
 .txt { font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
@@ -169,22 +180,21 @@ h1 {
 .txt hr { border: 0; border-top: 1px dashed var(--line); margin: 8px 0; }
 .txt code { font: 500 12.5px/1.4 var(--f-mono); background: var(--surface-2); border: 1px solid var(--line); padding: 1px 5px; border-radius: 4px; }
 @media (max-width: 760px) {
-  .cols { grid-template-columns: minmax(0, 1fr); }
+  .cols { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .session { grid-template-columns: 56px minmax(0, 1fr); gap: 12px; padding: 14px; }
   .day .dnum { font-size: 20px; }
   .week > summary { padding: 12px 14px; }
 }
 
-.row-note { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 16px; padding: 12px 18px; border-top: 1px solid var(--line); align-items: center; }
+.row-note { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 18px; padding: 12px 20px; border-top: 1px solid var(--line); align-items: center; }
 .row-note:first-child { border-top: 0; }
+.row-note .day .dnum { font-size: 18px; }
 .row-note.hol { background: var(--holiday-soft); }
 .row-note.hol .what { color: var(--holiday); font-weight: 600; }
 .row-note.duerow { background: var(--soon-soft); }
-.row-note.duerow .what { color: var(--ink); }
 .row-note.duerow .what b { color: var(--soon); }
 .row-note.duerow.past { background: var(--surface-2); opacity: .7; }
 .row-note.duerow.past .what b { color: var(--past); }
-.row-note .day .dnum { font-size: 18px; }
 .row-note.empty .what { color: var(--muted); font-style: italic; }
 @media (max-width: 760px) { .row-note { grid-template-columns: 56px minmax(0, 1fr); gap: 12px; padding: 12px 14px; } }
 
@@ -193,8 +203,38 @@ h1 {
 .break span { font: 500 13px/1 var(--f-mono); }
 .endmark { text-align: center; padding: 18px; font: 800 20px/1.2 var(--f-display); font-stretch: 85%; color: var(--muted); }
 
+/* Due dates tab */
+.due-wrap { display: grid; gap: 22px; margin-top: 18px; }
+.due-wrap h2 { margin: 0 0 10px; font: 800 22px/1.1 var(--f-display); font-stretch: 85%; }
+.due-table { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.due-row {
+  display: grid; grid-template-columns: 76px minmax(0, 1fr) 130px 120px; gap: 16px; align-items: center;
+  padding: 14px 18px; border-top: 1px solid var(--line); color: inherit; text-decoration: none;
+}
+.due-row:first-child { border-top: 0; }
+.due-row:hover { background: var(--surface-2); }
+.due-row.next { background: var(--soon-soft); }
+.due-date { font-family: var(--f-mono); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.due-date .d { display: block; font-size: 24px; font-weight: 600; }
+.due-date .m { display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.due-title { font-weight: 600; font-size: 15px; line-height: 1.35; }
+.due-note { font-size: 13px; color: var(--muted); margin-top: 3px; }
+.due-unit { font-size: 13px; color: var(--muted); }
+.unit-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c); margin-right: 6px; vertical-align: 1px; }
+.count { justify-self: end; font: 600 12.5px/1 var(--f-mono); padding: 6px 9px; border-radius: 6px; background: var(--surface-2); color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.due-row.soon .count { background: var(--soon-soft); color: var(--soon); box-shadow: inset 0 0 0 1px var(--soon); }
+.due-row.today .count { background: var(--soon); color: var(--surface); }
+.due-row.past { opacity: .6; }
+.due-row.past .due-title { text-decoration: line-through; text-decoration-color: var(--past); }
+@media (max-width: 760px) {
+  .due-row { grid-template-columns: 56px minmax(0, 1fr); gap: 6px 12px; padding: 12px 14px; }
+  .due-row .due-unit { grid-column: 2; }
+  .due-row .count { grid-column: 2; justify-self: start; }
+  .due-row .due-date { grid-row: span 3; }
+}
+
 .is-hidden { display: none !important; }
-.notice { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
+.notice { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; margin-top: 18px; }
 .notice.err { border-color: var(--holiday); }
 .notice code { font-family: var(--f-mono); font-size: 13px; }
 .foot { margin-top: 28px; color: var(--muted); font-size: 13px; }
@@ -214,25 +254,29 @@ h1 {
       <div class="progress-label" id="progress-label"></div>
     </div>
   </header>
-  <div class="reminder" id="reminder" hidden><span class="tag">Reminder</span><span id="reminder-text"></span></div>
 
-  <div class="toolbar" id="toolbar" hidden>
-    <span class="label">Show</span>
-    <div id="chips" style="display:contents"></div>
-    <button class="jump" id="jump" type="button">Go to this week</button>
+  <div class="bar" id="bar" hidden>
+    <div class="tabs" role="tablist">
+      <button class="tab" type="button" role="tab" id="tab-schedule" data-view="schedule" aria-controls="view-schedule">Schedule</button>
+      <button class="tab" type="button" role="tab" id="tab-due" data-view="due" aria-controls="view-due">Due dates <span class="n" id="due-n"></span></button>
+      <a class="next-due" id="next-due" href="#due" hidden></a>
+    </div>
+    <div class="strip" id="strip" aria-label="Jump to week"></div>
   </div>
 
-  <div class="layout">
-    <aside class="rail" id="rail" hidden>
-      <section class="due-card" aria-labelledby="due-h">
-        <h2 id="due-h">Due dates</h2>
-        <ul class="due-list" id="due-list"></ul>
-      </section>
-    </aside>
-    <main class="weeks" id="weeks">
-      <div class="notice" id="loading">Loading the schedule…</div>
-    </main>
-  </div>
+  <section id="view-schedule" role="tabpanel" aria-labelledby="tab-schedule">
+    <div class="toolbar" id="toolbar" hidden>
+      <span class="label">Show</span>
+      <div id="chips" style="display:contents"></div>
+      <span class="reminder" id="reminder" hidden></span>
+    </div>
+    <div class="weeks" id="weeks"><div class="notice">Loading the schedule…</div></div>
+  </section>
+
+  <section id="view-due" role="tabpanel" aria-labelledby="tab-due" hidden>
+    <div class="due-wrap" id="due-wrap"></div>
+  </section>
+
   <p class="foot" id="foot"></p>
 </div>
 
@@ -241,15 +285,16 @@ h1 {
   "use strict";
   var DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   var MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  var DAY = 86400000;
 
   function parseDate(s) { var p = String(s).split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
   function iso(d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
   function addDays(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
-  function mondayOf(d) { var x = new Date(d); var k = (x.getDay() + 6) % 7; x.setDate(x.getDate() - k); return x; }
-  function diffDays(a, b) { return Math.round((Date.UTC(a.getFullYear(), a.getMonth(), a.getDate()) - Date.UTC(b.getFullYear(), b.getMonth(), b.getDate())) / DAY); }
+  function mondayOf(d) { var x = new Date(d); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return x; }
+  function diffDays(a, b) { return Math.round((Date.UTC(a.getFullYear(), a.getMonth(), a.getDate()) - Date.UTC(b.getFullYear(), b.getMonth(), b.getDate())) / 86400000); }
   function fmt(d) { return DOW[d.getDay()] + " " + d.getDate() + " " + MON[d.getMonth()]; }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function dayCell(d) { return '<div class="day"><span class="dow">' + DOW[d.getDay()] + '</span><span class="dnum">' + d.getDate() + '</span><span class="dmon">' + MON[d.getMonth()] + "</span></div>"; }
+  function countdown(left) { return left < 0 ? "Closed" : left === 0 ? "Due today" : left === 1 ? "Tomorrow" : "In " + left + " days"; }
 
   // "Today" (add ?today=2027-03-03 to the URL to preview another date)
   var today = new Date(); today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -268,15 +313,14 @@ h1 {
   }
   function renderText(t) {
     if (!t || !String(t).trim()) return "";
-    var blocks = String(t).split(/\n\s*\n/), html = "";
-    blocks.forEach(function (b) {
+    var html = "";
+    String(t).split(/\n\s*\n/).forEach(function (b) {
       var lines = b.split("\n").map(function (l) { return l.trim(); }).filter(Boolean);
       if (!lines.length) return;
       var parts = lines.map(function (l) {
         if (/^-{3,}$/.test(l)) return "<hr>";
         var m = l.match(/^(C\dT\d+L\d+\w*)(.*)$/);
-        if (m) return "<code>" + esc(m[1]) + "</code>" + linkify(m[2]);
-        return linkify(l);
+        return m ? "<code>" + esc(m[1]) + "</code>" + linkify(m[2]) : linkify(l);
       });
       html += "<p>" + parts.join("<br>").replace(/<br><hr><br>/g, "<hr>").replace(/^<hr><br>|<br><hr>$/g, "<hr>") + "</p>";
     });
@@ -287,8 +331,8 @@ h1 {
     return l[0] || "";
   }
 
-  var state = { filter: "all" };
-  try { state.filter = localStorage.getItem("cert4-filter") || "all"; } catch (e) {}
+  var filter = "all";
+  try { filter = localStorage.getItem("cert4-filter") || "all"; } catch (e) {}
 
   function render(data) {
     var c = data.course || {};
@@ -300,89 +344,97 @@ h1 {
 
     document.getElementById("intake").textContent = c.intake || "";
     document.getElementById("title").textContent = c.title || "";
-    var meta = [];
-    meta.push("<span><strong>" + fmt(start) + " " + start.getFullYear() + "</strong> to <strong>" + fmt(end) + " " + end.getFullYear() + "</strong></span>");
-    meta.push("<span>Classes " + esc((c.classDays || []).join(", ")) + "</span>");
+    var meta = ["<span><strong>" + fmt(start) + " " + start.getFullYear() + "</strong> to <strong>" + fmt(end) + " " + end.getFullYear() + "</strong></span>",
+      "<span>Classes " + esc((c.classDays || []).join(", ")) + "</span>"];
     if (c.platform && c.platform.url) meta.push('<a href="' + esc(c.platform.url) + '" target="_blank" rel="noopener">' + esc(c.platform.name || "Learning platform") + "</a>");
     document.getElementById("meta").innerHTML = meta.join("");
-    if (c.reminder) { document.getElementById("reminder-text").textContent = c.reminder; document.getElementById("reminder").hidden = false; }
 
-    // Index data by date
     var holidays = {}; (data.holidays || []).forEach(function (h) { holidays[h.date] = h.name; });
     var breaks = (data.breaks || []).map(function (b) { return { name: b.name, s: parseDate(b.start), e: parseDate(b.end) }; });
-    var sessions = (data.sessions || []).slice().sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
-    var assessments = (data.assessments || []).slice().sort(function (a, b) { return a.due < b.due ? -1 : a.due > b.due ? 1 : 0; });
+    var byDate = function (k) { return function (a, b) { return a[k] < b[k] ? -1 : a[k] > b[k] ? 1 : 0; }; };
+    var sessions = (data.sessions || []).slice().sort(byDate("date"));
+    var assessments = (data.assessments || []).slice().sort(byDate("due"));
 
-    // Build teaching weeks: skip any week whose Mon-Fri sits inside a break
-    var weeks = [], cursor = mondayOf(start), n = 0, lastBreak = null;
-    while (cursor <= end) {
-      var fri = addDays(cursor, 4);
-      var br = breaks.filter(function (b) { return cursor >= b.s && fri <= b.e; })[0];
+    // Teaching weeks (a week whose Mon-Fri sits inside a break is skipped)
+    var weeks = [], cur = mondayOf(start), n = 0, lastBreak = null;
+    while (cur <= end) {
+      var fri = addDays(cur, 4);
+      var br = breaks.filter(function (b) { return cur >= b.s && fri <= b.e; })[0];
       if (br) { if (lastBreak !== br) weeks.push({ isBreak: true, br: br }); lastBreak = br; }
-      else { n++; weeks.push({ n: n, mon: new Date(cursor), sun: addDays(cursor, 6) }); }
-      cursor = addDays(cursor, 7);
+      else { n++; weeks.push({ n: n, mon: new Date(cur), sun: addDays(cur, 6) }); }
+      cur = addDays(cur, 7);
     }
-    var totalWeeks = n;
-    var weekOf = function (dateStr) {
-      var d = parseDate(dateStr);
-      for (var i = 0; i < weeks.length; i++) { var w = weeks[i]; if (!w.isBreak && d >= w.mon && d <= w.sun) return w.n; }
-      return null;
-    };
+    var totalWeeks = n, teach = weeks.filter(function (w) { return !w.isBreak; });
+    var weekOf = function (ds) { var d = parseDate(ds); var w = teach.filter(function (w) { return d >= w.mon && d <= w.sun; })[0]; return w ? w.n : null; };
 
-    // Current week
-    var current = null;
-    weeks.forEach(function (w) { if (!w.isBreak && today >= w.mon && today <= w.sun) current = w.n; });
-    if (!current && today < start) current = 1;
-    if (!current && today <= end) { var nx = weeks.filter(function (w) { return !w.isBreak && w.mon > today; })[0]; if (nx) current = nx.n; }
+    // Where the schedule is now: current week, and the class to highlight (today's, else the next one)
+    var current = null, inBreak = breaks.filter(function (b) { return today >= b.s && today <= b.e; })[0];
+    teach.forEach(function (w) { if (today >= w.mon && today <= w.sun) current = w.n; });
+    if (!current && today <= end) { var nx = teach.filter(function (w) { return w.mon > today; })[0]; if (nx) current = nx.n; }
+    var hlSession = sessions.filter(function (s) { return s.date >= iso(today); })[0];
+    var hlIsToday = hlSession && hlSession.date === iso(today);
+    if (today > end) { current = null; hlSession = null; }
 
-    // Progress
+    // Progress line
     var pl = document.getElementById("progress-label"), pf = document.getElementById("progress-fill");
-    if (today < start) { pl.innerHTML = "Starts <b>" + fmt(start) + "</b> · in " + diffDays(start, today) + " days"; pf.style.width = "0%"; }
+    if (today < start) { pl.innerHTML = "Starts <b>" + fmt(start) + "</b> · in " + diffDays(start, today) + " days"; }
     else if (today > end) { pl.innerHTML = "<b>Course complete</b>"; pf.style.width = "100%"; }
     else {
-      var inBreak = breaks.filter(function (b) { return today >= b.s && today <= b.e; })[0];
-      pl.innerHTML = inBreak ? "<b>" + esc(inBreak.name) + "</b> · back " + fmt(addDays(inBreak.e, 1)) : "Week <b>" + current + "</b> of " + totalWeeks + " · " + Math.max(0, diffDays(end, today)) + " days to go";
-      pf.style.width = Math.min(100, Math.round(((current - (inBreak ? 0 : 0.5)) / totalWeeks) * 100)) + "%";
+      pl.innerHTML = inBreak ? "<b>" + esc(inBreak.name) + "</b> · back " + fmt(addDays(inBreak.e, 1)) : "Week <b>" + current + "</b> of " + totalWeeks + " · " + diffDays(end, today) + " days to go";
+      pf.style.width = Math.min(100, Math.round(((current - (inBreak ? 1 : 0.5)) / totalWeeks) * 100)) + "%";
     }
     document.getElementById("progress").hidden = false;
 
-    // Filter chips
-    var used = {}; sessions.forEach(function (s) { used[s.unit] = 1; }); assessments.forEach(function (a) { used[a.unit] = 1; });
-    var chipHtml = '<button class="chip" type="button" data-f="all">All units</button>';
-    (data.units || []).forEach(function (u) {
-      if (!used[u.id] || u.id === "general") return;
-      chipHtml += '<button class="chip" type="button" data-f="' + esc(u.id) + '" style="--c:' + unitColor(u.id) + '" title="' + esc(u.codes || "") + '"><span class="dot"></span>' + esc(u.name) + "</button>";
-    });
-    var chips = document.getElementById("chips"); chips.innerHTML = chipHtml;
-    document.getElementById("toolbar").hidden = false;
-
-    // Due list
-    var dueHtml = "";
-    assessments.forEach(function (a) {
-      var d = parseDate(a.due), left = diffDays(d, today), cls = "", count;
-      if (left < 0) { cls = "past"; count = "Closed"; }
-      else if (left === 0) { cls = "today"; count = "Due today"; }
-      else { cls = left <= 7 ? "soon" : ""; count = left === 1 ? "Tomorrow" : "In " + left + " days"; }
-      var wk = weekOf(a.due);
-      dueHtml += '<li class="due-item ' + cls + '" data-unit="' + esc(a.unit) + '"><a href="#week-' + (wk || "") + '" data-week="' + (wk || "") + '">' +
-        '<div style="display:grid;grid-template-columns:56px minmax(0,1fr);gap:12px">' +
+    // Due dates: counts, next-due strip, full tab
+    var upcoming = assessments.filter(function (a) { return diffDays(parseDate(a.due), today) >= 0; });
+    var nextA = upcoming[0];
+    document.getElementById("due-n").textContent = upcoming.length ? upcoming.length + " open" : "";
+    var nd = document.getElementById("next-due");
+    if (nextA) {
+      var ld = diffDays(parseDate(nextA.due), today);
+      nd.innerHTML = "<b>Next due</b><span>" + esc(nextA.title) + "</span><span>· " + fmt(parseDate(nextA.due)) + " · " + countdown(ld) + "</span>";
+      nd.hidden = false;
+    }
+    function dueRow(a) {
+      var d = parseDate(a.due), left = diffDays(d, today), wk = weekOf(a.due);
+      var cls = left < 0 ? "past" : left === 0 ? "today" : left <= 7 ? "soon" : "";
+      if (a === nextA) cls += " next";
+      return '<a class="due-row ' + cls + '" href="#schedule" data-week="' + (wk || "") + '" data-unit="' + esc(a.unit) + '">' +
         '<div class="due-date"><span class="m">' + DOW[d.getDay()] + '</span><span class="d">' + d.getDate() + '</span><span class="m">' + MON[d.getMonth()] + "</span></div>" +
-        '<div><div class="due-title">' + esc(a.title) + '</div><div class="due-sub"><span class="count">' + count + "</span>" +
-        '<span><span class="unit-dot" style="--c:' + unitColor(a.unit) + '"></span>' + (wk ? "Week " + wk : "") + "</span>" +
-        (a.note ? "<span>" + esc(a.note) + "</span>" : "") + "</div></div></div></a></li>";
+        '<div><div class="due-title">' + esc(a.title) + "</div>" + (a.note ? '<div class="due-note">' + esc(a.note) + "</div>" : "") + "</div>" +
+        '<div class="due-unit"><span class="unit-dot" style="--c:' + unitColor(a.unit) + '"></span>' + esc(unitName(a.unit)) + (wk ? " · Week " + wk : "") + "</div>" +
+        '<span class="count">' + countdown(left) + "</span></a>";
+    }
+    var closed = assessments.filter(function (a) { return diffDays(parseDate(a.due), today) < 0; });
+    var dueHtml = "";
+    dueHtml += "<div><h2>Upcoming</h2>" + (upcoming.length ? '<div class="due-table">' + upcoming.map(dueRow).join("") + "</div>" : '<div class="notice">Nothing due. All assessments have closed.</div>') + "</div>";
+    if (closed.length) dueHtml += "<div><h2>Closed</h2><div class=\"due-table\">" + closed.map(dueRow).join("") + "</div></div>";
+    document.getElementById("due-wrap").innerHTML = dueHtml;
+
+    // Week strip
+    var strip = "";
+    weeks.forEach(function (w) {
+      if (w.isBreak) { strip += '<span class="wk-gap">' + esc(w.br.name) + "</span>"; return; }
+      var hasDue = assessments.some(function (a) { return weekOf(a.due) === w.n; });
+      strip += '<button class="wk' + (w.n === current ? " cur" : "") + (w.sun < today ? " past" : "") + (hasDue ? " has-due" : "") + '" type="button" data-week="' + w.n + '" title="Week ' + w.n + (hasDue ? " · assessment due" : "") + '">' +
+        '<span class="a">W' + w.n + '</span><span class="b">' + w.mon.getDate() + " " + MON[w.mon.getMonth()] + "</span></button>";
     });
-    document.getElementById("due-list").innerHTML = dueHtml || '<li class="due-item"><div class="due-sub">No assessments listed yet.</div></li>';
-    document.getElementById("rail").hidden = false;
+    document.getElementById("strip").innerHTML = strip;
+
+    // Filter chips
+    var used = {}; sessions.concat(assessments).forEach(function (s) { used[s.unit] = 1; });
+    var chips = document.getElementById("chips");
+    chips.innerHTML = '<button class="chip" type="button" data-f="all">All units</button>' + (data.units || []).filter(function (u) { return used[u.id] && u.id !== "general"; }).map(function (u) {
+      return '<button class="chip" type="button" data-f="' + esc(u.id) + '" style="--c:' + unitColor(u.id) + '" title="' + esc(u.codes || "") + '"><span class="dot"></span>' + esc(u.name) + "</button>";
+    }).join("");
+    if (c.reminder) { var r = document.getElementById("reminder"); r.innerHTML = "<b>Reminder:</b> " + esc(c.reminder); r.hidden = false; }
+    document.getElementById("toolbar").hidden = false;
 
     // Weeks
     var html = "";
     weeks.forEach(function (w) {
-      if (w.isBreak) {
-        html += '<div class="break"><b>' + esc(w.br.name) + "</b><span>" + fmt(w.br.s) + " – " + fmt(w.br.e) + "</span><span>No classes</span></div>";
-        return;
-      }
+      if (w.isBreak) { html += '<div class="break"><b>' + esc(w.br.name) + "</b><span>" + fmt(w.br.s) + " – " + fmt(w.br.e) + "</span><span>No classes</span></div>"; return; }
       var rows = [];
-      // Class-day holidays
       classDays.forEach(function (k) {
         var d = addDays(w.mon, (k + 6) % 7), key = iso(d);
         if (holidays[key] && d >= start && d <= end) rows.push({ date: key, kind: "hol", name: holidays[key] });
@@ -392,84 +444,96 @@ h1 {
       dues.forEach(function (a) { rows.push({ date: a.due, kind: "due", a: a }); });
       rows.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.kind === "due" ? 1 : -1); });
 
-      var isPast = w.sun < today, isCur = w.n === current;
-      var flags = "";
-      if (isCur && today >= start && today <= end) flags += '<span class="flag now">This week</span>';
+      var isPast = w.sun < today, isCur = w.n === current, flags = "";
+      if (isCur) flags += '<span class="flag now">' + (today < w.mon ? (w.n === 1 ? "Starts here" : "Up next") : "This week") + "</span>";
       if (dues.length) flags += '<span class="flag due">' + dues.length + " due</span>";
       if (rows.some(function (r) { return r.kind === "hol"; })) flags += '<span class="flag hol">Public holiday</span>';
 
       var body = "";
       rows.forEach(function (r) {
         var d = parseDate(r.date);
-        var dayCell = '<div class="day"><span class="dow">' + DOW[d.getDay()] + '</span><span class="dnum">' + d.getDate() + '</span><span class="dmon">' + MON[d.getMonth()] + "</span></div>";
         if (r.kind === "hol") {
-          body += '<div class="row-note hol" data-unit="any">' + dayCell + '<div class="what">Public holiday: ' + esc(r.name) + " · no class</div></div>";
+          body += '<div class="row-note hol" data-unit="any">' + dayCell(d) + '<div class="what">Public holiday: ' + esc(r.name) + " · no class</div></div>";
         } else if (r.kind === "due") {
-          var past = d < today;
-          body += '<div class="row-note duerow' + (past ? " past" : "") + '" data-unit="' + esc(r.a.unit) + '">' + dayCell + '<div class="what"><b>Due</b> · ' + esc(r.a.title) + (r.a.note ? " <span style=\"color:var(--muted)\">(" + esc(r.a.note) + ")</span>" : "") + "</div></div>";
+          body += '<div class="row-note duerow' + (d < today ? " past" : "") + '" data-unit="' + esc(r.a.unit) + '">' + dayCell(d) + '<div class="what"><b>Due</b> · ' + esc(r.a.title) + (r.a.note ? ' <span style="color:var(--muted)">(' + esc(r.a.note) + ")</span>" : "") + "</div></div>";
         } else {
-          var s = r.s, title = s.title || firstLine(s.topics), isToday = r.date === iso(today);
-          var cols = "";
+          var s = r.s, hl = s === hlSession, cols = "";
           [["Topics", s.topics], ["In class", s.activities], ["Extra / home task", s.homework]].forEach(function (p) {
             if (p[1] && String(p[1]).trim()) cols += '<div><div class="col-h">' + p[0] + '</div><div class="txt">' + renderText(p[1]) + "</div></div>";
           });
-          body += '<article class="session' + (isToday ? " is-today" : "") + '" data-unit="' + esc(s.unit) + '">' + dayCell + "<div>" +
-            '<span class="unit-tag" style="--c:' + unitColor(s.unit) + '">' + esc(unitName(s.unit)) + "</span>" + (isToday ? '<span class="today-pill">Today</span>' : "") +
-            '<h3 class="s-title">' + esc(title) + "</h3>" + (cols ? '<div class="cols">' + cols + "</div>" : "") + "</div></article>";
+          body += '<article class="session' + (hl ? " hl" : "") + '"' + (hl ? ' id="now"' : "") + ' data-unit="' + esc(s.unit) + '">' + dayCell(d) + "<div>" +
+            '<div class="s-head"><span class="unit-tag" style="--c:' + unitColor(s.unit) + '">' + esc(unitName(s.unit)) + "</span>" +
+            (hl ? '<span class="pill">' + (hlIsToday ? "Today" : "Next class") + "</span>" : "") + "</div>" +
+            '<h3 class="s-title">' + esc(s.title || firstLine(s.topics)) + "</h3>" + (cols ? '<div class="cols">' + cols + "</div>" : "") + "</div></article>";
         }
       });
-      if (!rows.some(function (r) { return r.kind === "s"; })) {
-        body += '<div class="row-note empty" data-unit="any"><div></div><div class="what">No classes scheduled this week.</div></div>';
-      }
-      var range = w.mon.getDate() + " " + MON[w.mon.getMonth()] + " – " + addDays(w.mon, 4).getDate() + " " + MON[addDays(w.mon, 4).getMonth()];
-      html += '<details class="week' + (isCur ? " current" : "") + '" id="week-' + w.n + '"' + (isPast ? "" : " open") + ">" +
-        '<summary><span class="week-no">Week ' + w.n + '</span><span class="week-range">' + range + '</span><span class="week-flags">' + flags + '<span class="chev" aria-hidden="true"></span></span></summary>' +
+      if (!rows.some(function (r) { return r.kind === "s"; })) body += '<div class="row-note empty" data-unit="any"><div></div><div class="what">No classes scheduled this week.</div></div>';
+      var fr = addDays(w.mon, 4);
+      html += '<details class="week' + (isCur ? " current" : "") + (isPast ? " is-past" : "") + '" id="week-' + w.n + '"' + (isPast ? "" : " open") + ">" +
+        '<summary><span class="week-no">Week ' + w.n + '</span><span class="week-range">' + w.mon.getDate() + " " + MON[w.mon.getMonth()] + " – " + fr.getDate() + " " + MON[fr.getMonth()] + '</span><span class="week-flags">' + flags + '<span class="chev" aria-hidden="true"></span></span></summary>' +
         '<div class="week-body">' + body + "</div></details>";
     });
     html += '<div class="endmark">Course ends ' + fmt(end) + " " + end.getFullYear() + "</div>";
     document.getElementById("weeks").innerHTML = html;
+    document.getElementById("bar").hidden = false;
+    if (data.updated) { var up = parseDate(data.updated); document.getElementById("foot").textContent = "Schedule last updated " + fmt(up) + " " + up.getFullYear() + ". Dates can change; check with your teacher if unsure."; }
 
-    if (data.updated) document.getElementById("foot").textContent = "Schedule last updated " + fmt(parseDate(data.updated)) + " " + parseDate(data.updated).getFullYear() + ". Dates can change; check with your teacher if unsure.";
-
-    // Interactions
+    // Filter
     function applyFilter() {
-      chips.querySelectorAll(".chip").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-f") === state.filter ? "true" : "false"); });
-      document.querySelectorAll("[data-unit]").forEach(function (el) {
+      chips.querySelectorAll(".chip").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-f") === filter ? "true" : "false"); });
+      document.querySelectorAll("#weeks [data-unit]").forEach(function (el) {
         var u = el.getAttribute("data-unit");
-        el.classList.toggle("is-hidden", state.filter !== "all" && u !== state.filter && u !== "any");
+        el.classList.toggle("is-hidden", filter !== "all" && u !== filter && u !== "any");
       });
       document.querySelectorAll(".week").forEach(function (wk) {
-        var any = wk.querySelector(".session:not(.is-hidden), .duerow:not(.is-hidden)");
-        wk.classList.toggle("is-hidden", state.filter !== "all" && !any);
+        wk.classList.toggle("is-hidden", filter !== "all" && !wk.querySelector(".session:not(.is-hidden), .duerow:not(.is-hidden)"));
       });
     }
-    if (state.filter !== "all" && !chips.querySelector('[data-f="' + state.filter + '"]')) state.filter = "all";
+    if (filter !== "all" && !chips.querySelector('[data-f="' + filter + '"]')) filter = "all";
     chips.addEventListener("click", function (e) {
       var b = e.target.closest(".chip"); if (!b) return;
-      var f = b.getAttribute("data-f");
-      state.filter = state.filter === f ? "all" : f;
-      try { localStorage.setItem("cert4-filter", state.filter); } catch (er) {}
+      filter = filter === b.getAttribute("data-f") ? "all" : b.getAttribute("data-f");
+      try { localStorage.setItem("cert4-filter", filter); } catch (er) {}
       applyFilter();
     });
     applyFilter();
 
+    // Tabs (#schedule / #due)
+    function show(view) {
+      document.querySelectorAll(".tab").forEach(function (t) { t.setAttribute("aria-selected", t.getAttribute("data-view") === view ? "true" : "false"); });
+      document.getElementById("view-schedule").hidden = view !== "schedule";
+      document.getElementById("view-due").hidden = view !== "due";
+      document.getElementById("strip").hidden = view !== "schedule";
+    }
     function goWeek(nw, smooth) {
+      if (location.hash === "#due") { history.replaceState(null, "", "#schedule"); }
+      show("schedule");
       var el = document.getElementById("week-" + nw); if (!el) return;
       el.open = true; el.classList.remove("is-hidden");
-      el.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
+      var now = document.getElementById("now"), useNow = nw == current && now && !now.classList.contains("is-hidden");
+      // Show the week header at the top; if the highlighted class would be below the fold, show the class instead
+      var target = useNow && (now.getBoundingClientRect().top - el.getBoundingClientRect().top) > window.innerHeight * 0.55 ? now : el;
+      target.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
     }
-    document.getElementById("due-list").addEventListener("click", function (e) {
-      var a = e.target.closest("a[data-week]"); if (!a || !a.getAttribute("data-week")) return;
-      e.preventDefault(); goWeek(a.getAttribute("data-week"), true);
+    document.querySelectorAll(".tab").forEach(function (t) {
+      t.addEventListener("click", function () { var v = t.getAttribute("data-view"); history.replaceState(null, "", "#" + v); show(v); window.scrollTo({ top: 0 }); });
     });
-    var jump = document.getElementById("jump");
-    if (current && today <= end) { jump.addEventListener("click", function () { goWeek(current, true); }); jump.textContent = today < start ? "Go to Week 1" : "Go to this week"; }
-    else jump.hidden = true;
+    window.addEventListener("hashchange", function () { show(location.hash === "#due" ? "due" : "schedule"); });
+    document.getElementById("strip").addEventListener("click", function (e) { var b = e.target.closest(".wk"); if (b) goWeek(b.getAttribute("data-week"), true); });
+    document.getElementById("due-wrap").addEventListener("click", function (e) {
+      var a = e.target.closest(".due-row"); if (!a || !a.getAttribute("data-week")) return;
+      e.preventDefault(); goWeek(a.getAttribute("data-week"), false);
+    });
+    nd.addEventListener("click", function (e) { e.preventDefault(); history.replaceState(null, "", "#due"); show("due"); window.scrollTo({ top: 0 }); });
+
+    show(location.hash === "#due" ? "due" : "schedule");
+    // Keep the current week visible in the strip, and open the page at today's class during the course
+    var curBtn = document.querySelector(".wk.cur");
+    if (curBtn) { var s = document.getElementById("strip"); s.scrollLeft = curBtn.offsetLeft - s.clientWidth / 2 + curBtn.clientWidth / 2; }
+    if (location.hash !== "#due" && current && today >= start) requestAnimationFrame(function () { goWeek(current, false); });
   }
 
-  function showError(msg) {
-    document.getElementById("weeks").innerHTML = '<div class="notice err"><strong>The schedule could not be loaded.</strong><p>' + msg + "</p></div>";
-  }
+  function showError(msg) { document.getElementById("weeks").innerHTML = '<div class="notice err"><strong>The schedule could not be loaded.</strong><p>' + msg + "</p></div>"; }
 
   fetch("schedule.json", { cache: "no-store" })
     .then(function (r) { if (!r.ok) throw new Error("schedule.json returned HTTP " + r.status + "."); return r.text(); })
@@ -477,8 +541,8 @@ h1 {
       var data;
       try { data = JSON.parse(txt); }
       catch (e) {
-        var pos = (String(e.message).match(/position (\d+)/) || [])[1], where = "";
-        if (pos) { var before = txt.slice(0, +pos); where = " The problem is around line " + (before.split("\n").length) + "."; }
+        var pos = (String(e.message).match(/position (\d+)/) || [])[1];
+        var where = pos ? " The problem is around line " + txt.slice(0, +pos).split("\n").length + "." : "";
         showError("schedule.json has a formatting mistake." + where + " Check for a missing comma, quote mark or bracket near that line. <code>" + esc(e.message) + "</code>");
         return;
       }
