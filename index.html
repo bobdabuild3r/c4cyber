@@ -274,6 +274,15 @@ h1 {
 }
 
 .is-hidden { display: none !important; }
+.assess { border: 1px solid var(--soon); background: var(--soon-soft); border-radius: 8px; padding: 8px 10px; margin: 2px 0 10px; }
+.assess:last-child { margin-bottom: 0; }
+.assess p { margin: 0 0 6px; }
+.assess p:last-child { margin-bottom: 0; }
+.assess-h { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: baseline; margin-bottom: 5px; font: 600 11px/1.3 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; color: var(--soon); }
+.assess-unit { text-transform: none; letter-spacing: 0; font: 600 12.5px/1.3 var(--f-body); color: var(--ink); }
+.assess-h a { margin-left: auto; text-transform: none; letter-spacing: 0; font-family: var(--f-body); font-size: 12px; }
+.legend { margin: -4px 0 14px; font-size: 13.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.legend .assess-chip { font: 600 11px/1 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; color: var(--soon); background: var(--soon-soft); border: 1px solid var(--soon); border-radius: 5px; padding: 4px 7px; }
 .to-top {
   position: fixed; z-index: 6; cursor: pointer;
   right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
@@ -320,6 +329,7 @@ h1 {
       <a class="folder-link" id="unit-assess" target="_blank" rel="noopener" hidden></a>
       <span class="reminder" id="reminder" hidden></span>
     </div>
+    <p class="legend" id="legend" hidden><span class="assess-chip">Assessment task</span> These boxes show the part of your unit assessment you can complete once you have finished that class.</p>
     <div class="weeks" id="weeks"><div class="notice">Loading the schedule…</div></div>
   </section>
 
@@ -363,13 +373,21 @@ h1 {
     }
     return out + esc(line.slice(last));
   }
-  function renderText(t, unit) {
-    if (!t || !String(t).trim()) return "";
-    // Lab lines (C1T3L1 ...) always come first in a column, before links and other notes
-    var isLab = function (l) { return /^C\dT\d+L\d+/.test(l.trim()); };
-    var all = String(t).split("\n"), labs = all.filter(isLab), others = all.filter(function (l) { return !isLab(l); });
-    if (labs.length) t = labs.join("\n") + "\n\n" + others.join("\n");
-    t = t.replace(/\n\s*\n(\s*\n)+/g, "\n\n").trim();
+  // Lines that refer to the unit's assessment (Complete Part 1: Task 1, Questions 1.1, Quiz, project templates ...)
+  var assessInfo = function () { return null; }; // set in render(): unit -> {name, url}
+  var isLabLine = function (l) { return /^C\dT\d+L\d+/.test(l.trim()); };
+  var isOtherItem = function (l) { var x = l.trim(); return isLabLine(x) || /\(TryHackMe\)\s*$/.test(x) || /^TryHackMe:/i.test(x) || /^https?:\/\//.test(x); };
+  function isAssessStart(l, next, prev) {
+    var x = l.trim();
+    if (!x || isOtherItem(x)) return false;
+    if (/worksheet/i.test(x) || (prev && /exercise:?\s*$/i.test(prev.trim()))) return false; // class exercises, not assessment
+    if (/^complete\s*$/i.test(x)) return !!next && isAssessStart(next);
+    return /^complete\s+(part|the\s+\w+\s+quiz|assessment|task|ci_|cl_)/i.test(x) ||
+      (/^part\s*(\d+|[a-z])\b/i.test(x) && !/^part\s*\d+$/i.test(x)) ||
+      /^task\s*\d+/i.test(x) || /^questions?\s+\d/i.test(x) ||
+      /quiz/i.test(x) || /assess\w*\s+(explanation|quiz)|submit your assess/i.test(x) || /^c[il]_cybersecproject/i.test(x) || /^documents\s+(required|to complete)/i.test(x);
+  }
+  function renderPlain(t, unit) {
     var html = "";
     String(t).split(/\n\s*\n/).forEach(function (b) {
       var lines = b.split("\n").map(function (l) { return l.trim(); }).filter(Boolean);
@@ -386,6 +404,36 @@ h1 {
       html += "<p>" + parts.join("<br>").replace(/<br><hr><br>/g, "<hr>").replace(/^<hr><br>|<br><hr>$/g, "<hr>") + "</p>";
     });
     return html.replace(/<p><hr><\/p>/g, "<hr>");
+  }
+  function renderText(t, unit) {
+    if (!t || !String(t).trim()) return "";
+    // Lab lines (C1T3L1 ...) always come first in a column, before links and other notes
+    var all = String(t).split("\n"), labs = all.filter(isLabLine), others = all.filter(function (l) { return !isLabLine(l); });
+    if (labs.length) t = labs.join("\n") + "\n\n" + others.join("\n");
+    t = t.replace(/\n\s*\n(\s*\n)+/g, "\n\n").trim();
+    // Split into plain text and assessment boxes
+    var lines = t.split("\n"), segs = [], cur = null, docsMode = false;
+    var nextNonBlank = function (i) { for (var j = i + 1; j < lines.length; j++) if (lines[j].trim()) return lines[j]; return ""; };
+    var prevNonBlank = function (i) { for (var j = i - 1; j >= 0; j--) if (lines[j].trim()) return lines[j]; return ""; };
+    lines.forEach(function (l, i) {
+      var x = l.trim(), inA = cur && cur.type === "a";
+      if (!x) { if (inA && !docsMode && !isAssessStart(nextNonBlank(i), "")) { cur = null; } else if (cur) cur.lines.push(""); return; }
+      if (isOtherItem(x)) { if (inA) { cur = null; docsMode = false; } }
+      else if (!inA && isAssessStart(x, nextNonBlank(i), prevNonBlank(i))) { cur = { type: "a", lines: [] }; segs.push(cur); docsMode = /^documents\s+(required|to complete)/i.test(x); }
+      if (!cur || (cur.type === "a" && isOtherItem(x))) { cur = { type: "p", lines: [] }; segs.push(cur); }
+      cur.lines.push(l);
+    });
+    var html = "";
+    segs.forEach(function (sg) {
+      var body = sg.lines.join("\n").trim();
+      if (!body) return;
+      if (sg.type === "p") { html += renderPlain(body, unit); return; }
+      var info = assessInfo(unit);
+      html += '<div class="assess"><div class="assess-h"><span>Assessment task</span>' + (info ? '<span class="assess-unit">' + esc(info.name) + "</span>" : "") +
+        (info && info.url ? '<a href="' + esc(info.url) + '" target="_blank" rel="noopener">Documents ↗</a>' : "") + "</div>" +
+        body.split(/\n\s*\n/).map(function (b) { return "<p>" + b.split("\n").map(function (q) { return linkify(q.trim()); }).filter(Boolean).join("<br>") + "</p>"; }).join("") + "</div>";
+    });
+    return html;
   }
   // Every "Topic N ..." line delivered that day becomes part of the bold heading; the rest stays in the Topics column
   function splitTopics(t) {
@@ -429,6 +477,7 @@ h1 {
     // OneDrive links per unit: "labsFolder" and "assessmentFolder" in schedule.json (buttons stay hidden until set)
     var folderUrl = function (id, key) { var u = units[id], v = u && u[key || "labsFolder"]; return /^https:\/\//.test(v || "") ? v : ""; };
     linkNames = data.linkNames || {};
+    assessInfo = function (id) { var u = units[id]; if (!u || id === "general") return null; var url = u.assessmentFolder; return { name: u.name, url: /^https:\/\//.test(url || "") ? url : "" }; };
     thmRooms = {}; Object.keys(data.tryhackme || {}).forEach(function (k) { if (/^https:\/\//.test(data.tryhackme[k])) thmRooms[normRoom(k)] = data.tryhackme[k]; });
     labFolders = (data.units || []).filter(function (u) { return folderUrl(u.id); }).map(function (u) { return { unit: u.id, prefix: u.labPrefix || "", url: folderUrl(u.id) }; });
     var folderLink = function (id, label, key) { var f = folderUrl(id, key); return f ? '<a class="folder-link" href="' + esc(f) + '" target="_blank" rel="noopener">' + label + ' <span aria-hidden="true">↗</span></a>' : ""; };
@@ -539,6 +588,7 @@ h1 {
     }).join("");
     if (c.reminder) { var r = document.getElementById("reminder"); r.innerHTML = "<b>Reminder:</b> " + esc(c.reminder); r.hidden = false; }
     document.getElementById("toolbar").hidden = false;
+    document.getElementById("legend").hidden = false;
 
     // A topic taught over several days ("Part 1", "Part 2" lines): count the parts so the heading can say "Part 1 of 2"
     var partTotals = {};
