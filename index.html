@@ -190,6 +190,7 @@ h1 {
 .s-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .unit-tag { display: inline-flex; align-items: center; gap: 6px; font: 600 12px/1 var(--f-mono); letter-spacing: .04em; text-transform: uppercase; color: var(--c); }
 .unit-tag::before { content: ""; width: 9px; height: 9px; border-radius: 2px; background: var(--c); }
+.part-tag { font: 600 11px/1 var(--f-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--c, var(--ink)); background: var(--surface-2); border: 1px solid var(--line); padding: 4px 7px; border-radius: 4px; }
 .pill { font: 600 11px/1 var(--f-mono); text-transform: uppercase; letter-spacing: .06em; background: var(--accent); color: var(--accent-ink); padding: 5px 7px; border-radius: 4px; }
 .folder-link {
   display: inline-flex; align-items: center; gap: 4px; font: 600 12px/1 var(--f-body); color: var(--accent);
@@ -372,14 +373,15 @@ h1 {
   }
   // Every "Topic N ..." line delivered that day becomes part of the bold heading; the rest stays in the Topics column
   function splitTopics(t) {
-    var heads = [], rest = [];
+    var heads = [], rest = [], part = "";
     String(t || "").split("\n").forEach(function (l) {
       var x = l.trim();
+      if (!part && /^Part\s*\d+$/i.test(x)) { part = x.replace(/\s+/g, " "); return; }
       if (/^Topic\s*\d+/i.test(x) && heads.indexOf(x.replace(/\s+/g, " ")) < 0) heads.push(x.replace(/\s+/g, " "));
       else rest.push(l);
     });
     if (!heads.length) { var f = firstLine(t); if (f) { heads.push(f); var i = rest.map(function (x) { return x.trim(); }).indexOf(f); if (i >= 0) rest.splice(i, 1); } }
-    return { heads: heads, rest: rest.join("\n").replace(/^(\s*(-{3,})?\s*\n)+/, "").trim() };
+    return { heads: heads, part: part, rest: rest.join("\n").replace(/^(\s*(-{3,})?\s*\n)+/, "").trim() };
   }
   function firstLine(t) {
     var l = String(t || "").split("\n").map(function (x) { return x.trim(); }).filter(function (x) { return x && !/^-{3,}$/.test(x); });
@@ -521,6 +523,10 @@ h1 {
     if (c.reminder) { var r = document.getElementById("reminder"); r.innerHTML = "<b>Reminder:</b> " + esc(c.reminder); r.hidden = false; }
     document.getElementById("toolbar").hidden = false;
 
+    // A topic taught over several days ("Part 1", "Part 2" lines): count the parts so the heading can say "Part 1 of 2"
+    var partTotals = {};
+    sessions.forEach(function (x) { var t = splitTopics(x.topics); if (t.part) { var k = x.unit + "|" + t.heads.join("|"); partTotals[k] = (partTotals[k] || 0) + 1; } });
+
     // Weeks
     var html = "";
     weeks.forEach(function (w) {
@@ -549,13 +555,14 @@ h1 {
           body += '<div class="row-note duerow' + (d < today ? " past" : "") + (isUrgent(r.a) ? " urgent" : "") + '" data-unit="' + esc(r.a.unit) + '">' + dayCell(d) + '<div class="what"><b>Due</b> · ' + esc(r.a.title) + (r.a.note ? ' <span style="color:var(--muted)">(' + esc(r.a.note) + ")</span>" : "") + (folderUrl(r.a.unit, "assessmentFolder") ? " " + folderLink(r.a.unit, "Assessment documents", "assessmentFolder") : "") + (isUrgent(r.a) ? '<span class="when">' + countdown(diffDays(d, today)) + "</span>" : "") + (submit && d >= today ? ' · <a href="' + esc(submit.url) + '" target="_blank" rel="noopener">Submit ↗</a>' : "") + "</div></div>";
         } else {
           var s = r.s, hl = s === hlSession, cols = "";
-          var tp = splitTopics(s.topics);
+          var tp = splitTopics(s.topics), partTag = "";
+          if (tp.part) { var tot = partTotals[s.unit + "|" + tp.heads.join("|")] || 1; partTag = '<span class="part-tag">' + esc(tp.part) + (tot > 1 ? " of " + tot : "") + "</span>"; }
           [["Topics", tp.rest], ["In class", s.activities], ["Extra / home task", s.homework]].forEach(function (p) {
             if (p[1] && String(p[1]).trim()) cols += '<div><div class="col-h">' + p[0] + '</div><div class="txt">' + renderText(p[1], s.unit) + "</div></div>";
           });
           body += '<article class="session' + (hl ? " hl" : "") + '"' + (hl ? ' id="now"' : "") + ' data-unit="' + esc(s.unit) + '">' + dayCell(d) + "<div>" +
             '<div class="s-head"><span class="unit-tag" style="--c:' + unitColor(s.unit) + '">' + esc(unitName(s.unit)) + "</span>" +
-            (hl ? '<span class="pill">' + (hlIsToday ? "Today" : "Next class") + "</span>" : "") + folderLink(s.unit, "Lab files") + "</div>" +
+            (hl ? '<span class="pill">' + (hlIsToday ? "Today" : "Next class") + "</span>" : "") + partTag + folderLink(s.unit, "Lab files") + "</div>" +
             '<h3 class="s-title">' + (s.title ? esc(s.title) + (tp.heads.length && s.title !== tp.heads[0] && /^Topic/i.test(tp.heads[0]) ? "<br>" + tp.heads.map(esc).join("<br>") : "") : tp.heads.map(esc).join("<br>")) + "</h3>" + (cols ? '<div class="cols">' + cols + "</div>" : "") + "</div></article>";
         }
       });
