@@ -1,0 +1,471 @@
+{
+  "updated": "2026-11-03",
+  "course": {
+    "title": "Certificate IV in Cyber Security",
+    "intake": "Meadowbank · Full-time · Semester 1, 2027",
+    "start": "2027-02-01",
+    "end": "2027-06-17",
+    "classDays": [
+      "Mon",
+      "Tue",
+      "Thu"
+    ],
+    "platform": {
+      "name": "TDC learning platform",
+      "url": "https://www.studytafensw.edu.au/"
+    },
+    "reminder": "Don't forget your WIT units: ICTICT443 · BSBWHS309 · VU23223"
+  },
+  "units": [
+    {
+      "id": "fund",
+      "name": "Fundamentals of Cyber Security",
+      "codes": "VU23213, VU23214, VU23217"
+    },
+    {
+      "id": "pentest",
+      "name": "Network and Web Pentesting",
+      "codes": "VU23215, VU23222"
+    },
+    {
+      "id": "nsda",
+      "name": "Network Security and Data Analysis",
+      "codes": "VU23216, VU23218"
+    },
+    {
+      "id": "automate",
+      "name": "Automate Pentesting",
+      "codes": "ICTPRG434, VU23226"
+    },
+    {
+      "id": "project",
+      "name": "Cyber Project",
+      "codes": "BSBINS401, VU23219, VU23220, VU23221"
+    },
+    {
+      "id": "wit",
+      "name": "WIT units",
+      "codes": "ICTICT443, BSBWHS309, VU23223"
+    },
+    {
+      "id": "general",
+      "name": "General",
+      "codes": ""
+    }
+  ],
+  "holidays": [
+    {
+      "date": "2027-03-29",
+      "name": "Easter Monday"
+    },
+    {
+      "date": "2027-06-14",
+      "name": "King's Birthday"
+    }
+  ],
+  "breaks": [
+    {
+      "name": "Autumn holidays",
+      "start": "2027-04-10",
+      "end": "2027-04-25"
+    }
+  ],
+  "assessments": [
+    {
+      "title": "Fundamentals of Cyber Security: Project and Quiz",
+      "unit": "fund",
+      "due": "2027-02-21"
+    },
+    {
+      "title": "ICTICT443 Work collaboratively in the ICT industry",
+      "unit": "wit",
+      "due": "2027-03-07"
+    },
+    {
+      "title": "Network Security and Data Analysis: Project and Quiz",
+      "unit": "nsda",
+      "due": "2027-03-30",
+      "note": "Due the evening of the Tuesday class"
+    },
+    {
+      "title": "Network and Web Pentesting: Project and Quiz",
+      "unit": "pentest",
+      "due": "2027-04-04"
+    },
+    {
+      "title": "BSBWHS309 Contribute effectively to WHS communication and consultation processes",
+      "unit": "wit",
+      "due": "2027-04-11"
+    },
+    {
+      "title": "Automate Pentesting: Project and Quiz",
+      "unit": "automate",
+      "due": "2027-05-23"
+    },
+    {
+      "title": "VU23223 Apply cyber security legislation, privacy and ethical practices",
+      "unit": "wit",
+      "due": "2027-05-23"
+    },
+    {
+      "title": "Cyber Project: Project and Quiz",
+      "unit": "project",
+      "due": "2027-06-13"
+    }
+  ],
+  "sessions": [
+    {
+      "date": "2027-02-01",
+      "unit": "general",
+      "title": "Orientation",
+      "topics": "Orientation\nCourse Overview\nTeams Access\nMoodle/TDC Access\nIntroduction (Knowing each other)\nIndividual Training Plan\n\nSign Up - TryHackMe  (https://tryhackme.com/)\nSign Up - Skillsforall (https://skillsforall.com/)",
+      "activities": "",
+      "homework": "How to use TryHackMe (TryHackMe)\nOpenVPN (TryHackMe)\nStarting Out In Cyber Sec (TryHackMe)\nLearning Cyber Security (TryHackMe)\nVirtualisation  Basics (TryHackMe)\nSecurity Awareness (TryHackMe)\nCommon Attacks (TryHackMe)\nOffensive Security Intro (TryHackMe)\nIntroduction to Cybersecurity (Skillsforall)"
+    },
+    {
+      "date": "2027-02-02",
+      "unit": "fund",
+      "topics": "Topic 1- Cyber Security in organisations\nTopic 2- PC Components\nTopic 3- Virtualisation\n\n--------\n\nWhat is Virtualisation?\nHypervisor\nVirtualBoX\nCloudlabs\nNetwork Adapter (VirtualBox)\nCloning\nImport and Export OVA\nGuest Additions",
+      "activities": "C1T3L1 - Installing VBOX on Windows\nC1T3L2 - Creating NatNetwork in VBOX - Windows\nC1T3L5 - Installing Kali using ISO in VBOX",
+      "homework": "C1T3L8 - Cloning VM in VBOX\nC1T3L9 - Exporting and Importing OVA to VBOX\nC1T3L3 - Installing Windows 10 in VBOX\nC1T3L4 - Installing Guest Additions on Windows 10\nC1T3L6 - Installing Debian using ISO in VBOX\nC1T3L7 - Installing Guest Additions on Debian\n\nComplete the 1st Quiz of Fundamentals of cyber Security\n\nPart 3: Practical Demonstration of Virtualisation\nTask 1  ( a & b)\nTask 2 ( a & b)"
+    },
+    {
+      "date": "2027-02-04",
+      "unit": "fund",
+      "topics": "Topic 6- Networking (Part 1)\n-----------\nWhat is a network?\nTypes of network.\nTypes of network topology.\nEthernet,IP,MAC\nOSI and TCP/IP\nClient/Server & Client/Client Security issues\nPacket tracer",
+      "activities": "Packet tracer Exercise:\nTask 0, Task 1, Task 2, Task 3, Task 4",
+      "homework": "Introductory Networking (TryHackMe)\nWhat is Networking? (TryHackMe)\n\nComplete Part 1\nTopic 1, Topic 2, Topic 3, Topic 4"
+    },
+    {
+      "date": "2027-02-08",
+      "unit": "fund",
+      "topics": "Topic 6- Networking (Part 2)\n----------\nPort Numbers, Loopback, ARP\nICMP,Telnet, SSH, DHCP, DNS,SMB\n\n----------------\nNumber Conversion\nSubnetting",
+      "activities": "C1T6L1- Network Connectivity\nC1T6L2- Configure  RD Linux Win\nTask 5 - Worksheet- hex2dec2bin",
+      "homework": "Pre reading: Topic 4- Windows Operating System\n\nPart 3: Practical Demonstration of Virtualisation\nTask 2 (d)\nTask 3  (b)"
+    },
+    {
+      "date": "2027-02-09",
+      "unit": "fund",
+      "topics": "Topic 4- Windows Operating System\nTopic 5- Linux Operating System (Part 1)\n------------\nHistory\nKernel & Shells\nDistributions\nFilesystem Hierarchical system(FHS)\nWorking with files",
+      "activities": "C1T5L1 - Files Linux\n\nComplete\n\nModule: Getting Started and Command Line from\nhttps://linuxjourney.com/",
+      "homework": "The Linux Command line for beginners:\nhttps://ubuntu.com/tutorials/command-line-for-beginners#1-overview\nOperating Systems: Introduction (TryHackMe)"
+    },
+    {
+      "date": "2027-02-11",
+      "unit": "fund",
+      "topics": "Topic 6- Networking (Part 3)\n----------\nNumber Conversion\nSubnetting",
+      "activities": "Task 6 - Worksheet -IP Addresses and Subnetting\n\nhttps://learningcontent.cisco.com/games/binary/index.html\n\nhttps://www.subnetting.net/Subnetting.aspx?mode=practice",
+      "homework": ""
+    },
+    {
+      "date": "2027-02-15",
+      "unit": "fund",
+      "topics": "Topic 7- Network troubleshooting and testing\nTopic 8: Internet of Things (IoT)",
+      "activities": "C1T7L0 - Wireshark Introduction Lab v1.1\nC1T7L1- Wireshark Activity 1\nC1T7L2 - Wireshark Activity 2\n\nC1T8L1_IoTnetworks\n\nFundamentals of Cyber\nPart 1: Presentation in class",
+      "homework": "Complete Assessment Quiz\n\nTraffic Analysis Essentials (TryHackMe)\nCyberChef: The Basics (TryHackMe)"
+    },
+    {
+      "date": "2027-02-16",
+      "unit": "fund",
+      "topics": "Topic 5- Linux Operating System (Part 2)\n---------\nCreating Users\nPermission/ Ownerships\nWildcards & Grep\nSoftware Management\nCron\nCompression and Archive",
+      "activities": "C1T5L2 - Own Prems  Linux\nC1T5L3 - Wildcards Linux Commands\nComplete ITP\n\nPart 3: Practical Demonstration of Virtualisation\nTask 2  (c)\nTask 3  (a)",
+      "homework": "Linux Fundamentals Part 1 (TryHackMe)\n\nChallenge:\nFirst Grep (PicoCTF)\nFirst Find (PicoCTF)\nBig Zip (PicoCTF)\n\nOverTheWire Bandit challenge (Level 1-12)"
+    },
+    {
+      "date": "2027-02-18",
+      "unit": "nsda",
+      "topics": "Topic 1- Securing Network Devices",
+      "activities": "C3T01L0- ConfigSwitchSetts\nC3T01L1- ConfigRouterSetts\nC3T01L2- ConfigSecurePass_SSH\nC3T01L3_WLANSetup\n\nComplete the 1st Quiz of Network Sec and Data analysis",
+      "homework": "Complete Part 1: Task 1\n Questions 1.1, 1.2, 2.1,2.2"
+    },
+    {
+      "date": "2027-02-22",
+      "unit": "nsda",
+      "topics": "Topic 2- Data and Database Concepts\nTopic 3- Databases as a repository for data",
+      "activities": "C3T03L1 - MariaDB_InstConfig\nC3T03L2- MongoDB_InstConfig\n\nhttps://www.quackit.com/database/tutorial/what_is_a_database.cfm\n\nhttps://sqlbolt.com/ => Please complete Lessons 1 to 5 and 12 to 18 Only",
+      "homework": "Complete Part 1: Task 2: Structured and unstructured database setup"
+    },
+    {
+      "date": "2027-02-23",
+      "unit": "pentest",
+      "topics": "Topic 1- Introduction to Ethical Hacking\nTopic 2- Cyber Securtiy Threats\nTopic 3- Network Testing Lab\nTopic 4- Remote Shells  (part  1)\n\nPenetration Testing Execution Standard (PTES)\nInformation Systems Security Assessment Framework (ISSAF)",
+      "activities": "https://www.isdecisions.com/user-security-awareness-game/\n\nhttp://www.pentest-standard.org/index.php/Main_Page\n\nhttps://www.computersecuritystudent.com/HOME/index.html\n\nSetting up testing environment (Meta and Kali)\nC2T04L1 -  NetCat_RemoteShell",
+      "homework": "Vulnerabilities 101 (TryHackMe)\nSecurity Engineer Intro (TryHackMe)\nPentesting Fundamentals (TryHackMe)\nThe Hacker Methodology (TryHackMe)\n\nDarknet Diaries - Episode 59 (The Courthouse)"
+    },
+    {
+      "date": "2027-02-25",
+      "unit": "nsda",
+      "topics": "Topic 4- Identity and Access Management (IAM)",
+      "activities": "C3T04L1- ConfigAAACisctoRtr",
+      "homework": "Complete Part 1: Task 1\nQuestions 1.3, 1.4"
+    },
+    {
+      "date": "2027-03-01",
+      "unit": "nsda",
+      "topics": "Topic 5- System logs",
+      "activities": "C3T05L1_WindowsFW\nC3T05L2_LogANAChallenge",
+      "homework": "Intro to Logs (TryHackMe)\n\nComplete Part 1: Task 3\nQuestions 3.4"
+    },
+    {
+      "date": "2027-03-02",
+      "unit": "pentest",
+      "topics": "Topic 5- Reconnaissance  and  Enumeration\nTopic 6 -  Gaining access & Exploitation\n--------\n- Explain Reconnaissance (Nmap)\n- PythonNmap\n\n- Explaning Vsftpd\n- Intro to Metasploit",
+      "activities": "C2T05L1 -  NmapEnumeration\nC2T06L3 - PythonNmap\n\nC2T06L1 - ExploitMetasploitable2\nC2T06L2 - Metasploit\n\nComplete the 1st Quiz of Network and Wen Pentesting",
+      "homework": "Nmap (TryHackMe)\nRustScan (TryHackMe)\nMetasploit: Introduction (TryHackMe)\nIce (TryHackMe)\n\nDarknet Diaries - Episode 6 (The Beirut Bank Job)"
+    },
+    {
+      "date": "2027-03-04",
+      "unit": "nsda",
+      "topics": "Topic 6- Network Access Control Features  (Firewalls)",
+      "activities": "C3T06L1_ACL\nC3T06L2_Firewall_pfSense",
+      "homework": ""
+    },
+    {
+      "date": "2027-03-08",
+      "unit": "nsda",
+      "topics": "Topic 6- Network Access Control Features  (Proxy)",
+      "activities": "C3T06L4_Squid_Proxy_pfSense",
+      "homework": "Complete Part 1: Task 3:\nQuestions 3.1, 3.2, 3.3, 3.5\n\nComplete Part 1: Task 4: Proxy Server"
+    },
+    {
+      "date": "2027-03-09",
+      "unit": "pentest",
+      "topics": "Topic 6 -  Gaining access & Exploitation\n----------\n- What is Brute force?\n- What is TCP SYN & related attacks?",
+      "activities": "C2T06L4 - BruteForceAttack\nC2T06L5 - Social Engineering Attack\nC2T06L6 - TCP SYN Flood Attacks\n\nhttps://www.phishingbox.com/phishing-iq-test/quiz.php?reset=1\n\nNetwork and webpentesting Assessment explanation",
+      "homework": "Hydra (TryHackMe)\nBlue (TryHackMe)\nGeolocating Images (TryHackMe)\n\nDarknet Diaries - Episode 33 (RockYou)\nDarknet Diaries - Episode 26 (IRS)\n\nhttps://www.keepersecurity.com/blog/2023/08/04/understanding-rockyou-txt-a-tool-for-security-and-a-weapon-for-hackers/"
+    },
+    {
+      "date": "2027-03-11",
+      "unit": "nsda",
+      "topics": "Topic 6- Network Access Control Features  (IDS/IPS)",
+      "activities": "C3T06L3_Suricata_IDS_IPS_pfSense\nC3T06L5_ZoneBasedPolicyFW",
+      "homework": ""
+    },
+    {
+      "date": "2027-03-15",
+      "unit": "nsda",
+      "topics": "Topic 6- Network Access Control Features  (IDS/IPS)",
+      "activities": "C3T06L3_Suricata_IDS_IPS_pfSense\nC3T06L5_ZoneBasedPolicyFW",
+      "homework": "Complete Part 2: Task 1:\nQuestions 1.1, 1.2, 1.3\n\nComplete Part 2: Task 2:\nQuestions 2.1, 2.2\n\nIntroduction to SIEM (TryHackMe)"
+    },
+    {
+      "date": "2027-03-16",
+      "unit": "pentest",
+      "topics": "What is ARP,DNS & related attacks?\n\nTopic 7- Wireless Testing\nTopic 8- Introduction to web pentesting\nTopic 9- Web Framework and Stacks\nTopic 10- HTTP\nTopic 11- Web app testing",
+      "activities": "https://howdns.works/\n\nC2T06L7- ARP_DNS Cachepoision\n\nTryHackMe: Wifi Hacking 101 (Aircrackng/wavemon)\nTryHackMe: Wi-Fi Fundamentals and Reconnaissance\n\nC2T10L1- HTTPmethods\nhttps://howhttps.works/why-do-we-need-https/\nHTTP in detail (TryHackMe)\nWeb Application Security (TryHackMe)",
+      "homework": "Basic CTF Challenges (Link to be provided)\n\nIntroduction to  SIEM (TryHackMe)\n\nIntroduction to OWASP ZAP (TryHackMe)\n\nDarknet Diaries - Episode 84 (Jet-setters)"
+    },
+    {
+      "date": "2027-03-18",
+      "unit": "nsda",
+      "topics": "Topic 7- Cryptography\nTopic 8- Virtual Priave Networks (VPN)",
+      "activities": "C3T07L1_SSH_SrvSetup\nC3T08L1_VPN_RemoteAccess_pfSense\nC3T08L2_VPN_Site2Site_pfSense\n\nCryptography Basics (TryHackMe)\n\nDarknet Diaries - Episode 3 ( DIGINOTAR, YOU ARE THE WEAKEST LINK, GOOD BYE!)",
+      "homework": "Complete Part 2: Task 1:\nQuestions 1.1, 1.2, 1.3\n\nComplete Part 2: Task 2:\nQuestions 2.1, 2.2\n\nIntroduction to SIEM (TryHackMe)"
+    },
+    {
+      "date": "2027-03-22",
+      "unit": "nsda",
+      "topics": "Part 1\n\nTopic 9- SIEM\nTopic 10- Splunk",
+      "activities": "C3T10L1_Splunk_InstConfig\nC3T10L2_ImportSplunkDataset\nC3T10L3_SplunkTraining\n\nhttps://www.microsoft.com/en-au/security/business/security-101/what-is-siem\n\nJunior Security Analyst Intro (TryHackMe)\nIntroduction to  SIEM (TryHackMe)\nSplunk: Exploriing SPL (TryHackMe)",
+      "homework": "Complete Part 3: Task 1 -  Data analysis case study"
+    },
+    {
+      "date": "2027-03-23",
+      "unit": "pentest",
+      "topics": "Topic 12- Interception and manipulation with web proxy\nTopic 13- Enumerating the web app",
+      "activities": "C2T12L1- SpiderProxyIntercept\nC2T13L1- NiktoWebEnumeration",
+      "homework": "Become a Hacker (TryHackMe)\n\nBurp Suite: Repeater (TryHackMe)"
+    },
+    {
+      "date": "2027-03-25",
+      "unit": "nsda",
+      "topics": "Part 2\n\nTopic 9- SIEM\nTopic 10- Splunk",
+      "activities": "C3T10L1_Splunk_InstConfig\nC3T10L2_ImportSplunkDataset\nC3T10L3_SplunkTraining\n\nJunior Security Analyst Intro (TryHackMe)\nIntroduction to  SIEM (TryHackMe)\nSplunk: Exploriing SPL (TryHackMe)",
+      "homework": "Complete Part 3: Task 1 -  Data analysis case study"
+    },
+    {
+      "date": "2027-03-30",
+      "unit": "pentest",
+      "topics": "Topic 14- Cross-Site Scripting (XSS)\nTopic 15- SQLi",
+      "activities": "C2T14L1- XSS_Attacks\nC2T15L1- SQLi_InjectAttacks",
+      "homework": "Lesson Learned? (TryHackMe)\nSQLMAP (TryHackMe)\nNoSQL Injection Basics (TryHackMe)\n\nhttps://portswigger.net/web-security/sql-injection/lab-retrieve-hidden-data\n\nhttps://portswigger.net/web-security/sql-injection/lab-login-bypass"
+    },
+    {
+      "date": "2027-04-01",
+      "unit": "pentest",
+      "topics": "Topic 16- IDOR\nTopic 17- Cookies\nTopic 18- Remote shells (part 2)\nTopic 19- Reporting",
+      "activities": "C2T16L1- IDOR_attacks\nC2T17L1- WebAuth_SessionSecurity\nC2T18L1- PHP_ReverseShellAttack",
+      "homework": "Corridor (TryHackMe)\nNeighbour (TryHackMe)\nOWASP Broken Access Control (TryHackMe)"
+    },
+    {
+      "date": "2027-04-05",
+      "unit": "project",
+      "topics": "Topic 1: Information and security policies",
+      "activities": "Part 1: Undertake research and develop a project plan\n\nTask 1: Undertake research and write a draft research report",
+      "homework": "SOC L1 Alert Reporting (TryHackMe)"
+    },
+    {
+      "date": "2027-04-06",
+      "unit": "automate",
+      "topics": "Topic 1- Introduction to pentesting techniques and automation tools\n\nExplanation of Unit Automate Pentesting\n\nVulnerability Management\nVulnerabilty Scanning\nCVSS\nAPT & TTP\nATT&CK Framework (Navigator)\nCyber Kill Chain\nZero Trust Networking",
+      "activities": "C4T01L1_ClientMWDefense",
+      "homework": "Vulnerabilites 101 (TryHackMe)\nIntro to Cyber Threat Intel (TryHackMe)\nCyber Scotland 2021 (TryHackMe)\nPython Basics (TryHackMe)\nPython Tutorial (W3schools)"
+    },
+    {
+      "date": "2027-04-08",
+      "unit": "project",
+      "topics": "Topic 1: Information and security policies",
+      "activities": "Part 1: Undertake research and develop a project plan\n\nTask 1: Undertake research and write a draft research report",
+      "homework": "SOC L1 Alert Reporting (TryHackMe)"
+    },
+    {
+      "date": "2027-04-26",
+      "unit": "project",
+      "topics": "Topic 2: Establish project team",
+      "activities": "Part 1: Undertake research and develop a project plan\n\nTask 2: Seek feedback on draft research report  (Cl_CyberSecProject_Pro2of2_Appx_Email1_Research_Report_Submission)",
+      "homework": "Preparation (TryHackMe)\nIR Playbooks (TryHackMe)"
+    },
+    {
+      "date": "2027-04-27",
+      "unit": "automate",
+      "topics": "Topic 2:  Advanced pentesting tools\n\nSearchsploit\nMetasploit\nFile transfer (Wget & Python server)\nNessus",
+      "activities": "C4T02L1_VulnExploits\nC4T02L2_NessusInfoGather\n\nCyber Challenge_8 (Optional)",
+      "homework": "Nessus (TryHackMe)\nPython Tutorial (W3schools)"
+    },
+    {
+      "date": "2027-04-29",
+      "unit": "project",
+      "topics": "Topic 3: Develop an  Incident Response Plan (IRP)",
+      "activities": "Part 1: Undertake research and develop a project plan\n\nTask 3: Develop a Project Plan",
+      "homework": "http://www.pentest-standard.org/index.php/Main_Page"
+    },
+    {
+      "date": "2027-05-03",
+      "unit": "project",
+      "topics": "Topic 4: Determining risk categories",
+      "activities": "Part 1: Undertake research and develop a project plan\n\nTask 3: Develop a Project Plan\n\nPart 2: Distribute project paln to stakeholders",
+      "homework": ""
+    },
+    {
+      "date": "2027-05-04",
+      "unit": "automate",
+      "topics": "Topic 3: Introduction to automation (Part 1)",
+      "activities": "C4T03L1_AlgoFlowCharts\nC4T03L2_LoopsConds\nC4T03L3_SimpleScript",
+      "homework": "Part 1 Task 1 – Collaborate with Others to Establish Problem Guidelines\nPart 1 Task 2 – Design abstract script, flowchart, and algorithm"
+    },
+    {
+      "date": "2027-05-06",
+      "unit": "project",
+      "topics": "Topic 5: Gather research information",
+      "activities": "Part 1: Undertake research and develop a project plan\n\nTask 3: Develop a Project Plan\n\nPart 2: Distribute project paln to stakeholders",
+      "homework": "Complete\nCI_CyberSecProject_AE_Pro2of2_Appx_ProjectPlan\n\nCI_CyberSecProject_Pro2of2_Appx_Email2_Project_Plan_Submission"
+    },
+    {
+      "date": "2027-05-10",
+      "unit": "project",
+      "topics": "Topic 6: Present research information",
+      "activities": "Part 3: Execute the IRP/T Project\n\nTask 1: Undertake detailed research into Gelos cyber security systems\nTask 2: Develop an Incident Response Plan (IRP)  - Red Team Playbook",
+      "homework": "Documents required:\n\nPart B of the Cl_CyberSecProject_AE_Pro2of2_Appx_ReportTemplate\n\nCI_CyberSecProject_AE_Pro2of2_Appx_RedTeamPlaybook"
+    },
+    {
+      "date": "2027-05-11",
+      "unit": "automate",
+      "topics": "Topic 3: Introduction to automation (Part 2)",
+      "activities": "C4T03L1_AlgoFlowCharts\nC4T03L2_LoopsConds\nC4T03L3_SimpleScript",
+      "homework": "Part 1 Task 3 – Run the Script and Check the Outcome and Documentation\nPart 1 Task 4 – Share script output and seek feedback"
+    },
+    {
+      "date": "2027-05-13",
+      "unit": "project",
+      "topics": "Topic 7: Security system controls and infrastructure",
+      "activities": "C3T07L1 - Performing Security baseline scan using OpenVAS.docx",
+      "homework": "Complete\n\nCl_CyberSecProject_AE_Pro2of2_Appx_ReportTemplate\n\nOpenVAS (TryHackMe)"
+    },
+    {
+      "date": "2027-05-17",
+      "unit": "project",
+      "topics": "Topic 8: Develop an IRT exercise",
+      "activities": "Part 3: Execute the IRP/T Project\n\nTask 1: Undertake detailed research into Gelos cyber security systems\nTask 2: Develop an Incident Response Plan (IRP) - Red Team Playbook",
+      "homework": "CI_CyberSecProject_AE_Pro2of2_Appx_RedTeamPlaybook"
+    },
+    {
+      "date": "2027-05-18",
+      "unit": "automate",
+      "topics": "Topic 4: Basic manual enumeration & Privilege escalation\n\nTypes of Exploit\nLinPeas\nLinEnum\nSUID\nSudoers file exploit\nStabiilising Shell\n\nTopic 5: Documenting and reporting",
+      "activities": "C4T04L1_ExploitShells\nC4T04L3_LinuxPrivEsc\n\nsudo security bypass (TryHackMe)\nBolt (TryHackMe)\n\nCyber Challenge_1 (Optional)",
+      "homework": "Part 2 Task 1 – Manual exploitation and privilege exploitation\nPart 2 Task 2 – Apply common technologies to defend workstations"
+    },
+    {
+      "date": "2027-05-20",
+      "unit": "project",
+      "topics": "Topic 8: Develop an IRT exercise",
+      "activities": "Part 3: Execute the IRP/T Project\n\nTask 1: Undertake detailed research into Gelos cyber security systems\nTask 2: Develop an Incident Response Plan (IRP) - Red Team Playbook",
+      "homework": "CI_CyberSecProject_AE_Pro2of2_Appx_RedTeamPlaybook"
+    },
+    {
+      "date": "2027-05-24",
+      "unit": "project",
+      "topics": "Topic 9: Prepare for the IRT exercise",
+      "activities": "Part 3: Execute the IRP/T Project\n\nTask 1: Undertake detailed research into Gelos cyber security systems\nTask 2: Develop an Incident Response Plan (IRP) - Blue team Playbook",
+      "homework": "CI_CyberSecProject_AE_Pro2of2_Appx_IncidentResponsePlanTemplate"
+    },
+    {
+      "date": "2027-05-25",
+      "unit": "project",
+      "topics": "Topic 9: Prepare for the IRT exercise",
+      "activities": "Part 3: Execute the IRP/T Project\n\nTask 1: Undertake detailed research into Gelos cyber security systems\nTask 2: Develop an Incident Response Plan (IRP) - Blue team Playbook",
+      "homework": "CI_CyberSecProject_AE_Pro2of2_Appx_IncidentResponsePlanTemplate"
+    },
+    {
+      "date": "2027-05-27",
+      "unit": "project",
+      "topics": "Topic 9: Prepare for the IRT exercise",
+      "activities": "Part 3: Execute the IRP/T Project\n\nTask 1: Undertake detailed research into Gelos cyber security systems\nTask 2: Develop an Incident Response Plan (IRP) - Blue team Playbook",
+      "homework": "CI_CyberSecProject_AE_Pro2of2_Appx_IncidentResponsePlanTemplate"
+    },
+    {
+      "date": "2027-05-31",
+      "unit": "project",
+      "topics": "Practise for IRT Exercise",
+      "activities": "",
+      "homework": ""
+    },
+    {
+      "date": "2027-06-01",
+      "unit": "project",
+      "topics": "Practise for IRT Exercise",
+      "activities": "",
+      "homework": ""
+    },
+    {
+      "date": "2027-06-03",
+      "unit": "project",
+      "topics": "Topic 10 - Carry out IRTx Day (Book your calender)",
+      "activities": "",
+      "homework": ""
+    },
+    {
+      "date": "2027-06-07",
+      "unit": "project",
+      "topics": "Topic 11: Evaluate the IRT exercise",
+      "activities": "Part 4: Evaluate the Incident Response Plan exercise\n\nTask 1: Evaluate the Incident Response Plan exercise\n\nPart 5: Develop and present Cyber-Security Implementation Plan\n\nTask 1: Develop an implementation plan\nTask 2: Present research findings, recommendations and lessons learnt",
+      "homework": "Documents to complete\n\nCI_CyberSecProject_AE_Pro2of2_Appx_EndProjectReport\n\nCI_CyberSecProject_AE_Pro2of2_Appx_CyberSecurityImplemenationPlan\n\nGant Chart\n\nCl_CyberSecProject_AE_Pro2of2_Email3_End_of_Project_Submission\n\nPart 5: Task 2: Reflection powerpoint"
+    },
+    {
+      "date": "2027-06-08",
+      "unit": "project",
+      "title": "Open Lab",
+      "topics": "Topic 11: Evaluate the IRT exercise",
+      "activities": "Team presentation of the project",
+      "homework": "Submit your assessemnt\n(List of documents to submit is under Additional Resources Directory)"
+    },
+    {
+      "date": "2027-06-10",
+      "unit": "general",
+      "title": "Extra practice",
+      "topics": "https://www.linkedin.com/learning/incident-handling-process-cybersecurity-labs-powered-by-hack-the-box?u=57684225\nEasy Peasy (TryHackMe)\nBrooklyn Nine Nine (TryHackMe)\nLazyAdmin (TryHackMe)",
+      "activities": "",
+      "homework": ""
+    }
+  ]
+}
