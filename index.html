@@ -370,6 +370,17 @@ h1 {
     });
     return html.replace(/<p><hr><\/p>/g, "<hr>");
   }
+  // Every "Topic N ..." line delivered that day becomes part of the bold heading; the rest stays in the Topics column
+  function splitTopics(t) {
+    var heads = [], rest = [];
+    String(t || "").split("\n").forEach(function (l) {
+      var x = l.trim();
+      if (/^Topic\s*\d+/i.test(x) && heads.indexOf(x.replace(/\s+/g, " ")) < 0) heads.push(x.replace(/\s+/g, " "));
+      else rest.push(l);
+    });
+    if (!heads.length) { var f = firstLine(t); if (f) { heads.push(f); var i = rest.map(function (x) { return x.trim(); }).indexOf(f); if (i >= 0) rest.splice(i, 1); } }
+    return { heads: heads, rest: rest.join("\n").replace(/^(\s*(-{3,})?\s*\n)+/, "").trim() };
+  }
   function firstLine(t) {
     var l = String(t || "").split("\n").map(function (x) { return x.trim(); }).filter(function (x) { return x && !/^-{3,}$/.test(x); });
     return l[0] || "";
@@ -538,13 +549,14 @@ h1 {
           body += '<div class="row-note duerow' + (d < today ? " past" : "") + (isUrgent(r.a) ? " urgent" : "") + '" data-unit="' + esc(r.a.unit) + '">' + dayCell(d) + '<div class="what"><b>Due</b> · ' + esc(r.a.title) + (r.a.note ? ' <span style="color:var(--muted)">(' + esc(r.a.note) + ")</span>" : "") + (folderUrl(r.a.unit, "assessmentFolder") ? " " + folderLink(r.a.unit, "Assessment documents", "assessmentFolder") : "") + (isUrgent(r.a) ? '<span class="when">' + countdown(diffDays(d, today)) + "</span>" : "") + (submit && d >= today ? ' · <a href="' + esc(submit.url) + '" target="_blank" rel="noopener">Submit ↗</a>' : "") + "</div></div>";
         } else {
           var s = r.s, hl = s === hlSession, cols = "";
-          [["Topics", s.topics], ["In class", s.activities], ["Extra / home task", s.homework]].forEach(function (p) {
+          var tp = splitTopics(s.topics);
+          [["Topics", tp.rest], ["In class", s.activities], ["Extra / home task", s.homework]].forEach(function (p) {
             if (p[1] && String(p[1]).trim()) cols += '<div><div class="col-h">' + p[0] + '</div><div class="txt">' + renderText(p[1], s.unit) + "</div></div>";
           });
           body += '<article class="session' + (hl ? " hl" : "") + '"' + (hl ? ' id="now"' : "") + ' data-unit="' + esc(s.unit) + '">' + dayCell(d) + "<div>" +
             '<div class="s-head"><span class="unit-tag" style="--c:' + unitColor(s.unit) + '">' + esc(unitName(s.unit)) + "</span>" +
             (hl ? '<span class="pill">' + (hlIsToday ? "Today" : "Next class") + "</span>" : "") + folderLink(s.unit, "Lab files") + "</div>" +
-            '<h3 class="s-title">' + esc(s.title || firstLine(s.topics)) + "</h3>" + (cols ? '<div class="cols">' + cols + "</div>" : "") + "</div></article>";
+            '<h3 class="s-title">' + (s.title ? esc(s.title) + (tp.heads.length && s.title !== tp.heads[0] && /^Topic/i.test(tp.heads[0]) ? "<br>" + tp.heads.map(esc).join("<br>") : "") : tp.heads.map(esc).join("<br>")) + "</h3>" + (cols ? '<div class="cols">' + cols + "</div>" : "") + "</div></article>";
         }
       });
       if (!rows.some(function (r) { return r.kind === "s"; })) body += '<div class="row-note empty" data-unit="any"><div></div><div class="what">No classes scheduled this week.</div></div>';
