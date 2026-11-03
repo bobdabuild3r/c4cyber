@@ -23,6 +23,8 @@
   --accent-ink: #ffffff;
   --soon: #a85d00;
   --soon-soft: #fff1dc;
+  --urgent: #c4231c;
+  --urgent-soft: #fde7e5;
   --past: #8b96a4;
   --holiday: #9a3b52;
   --holiday-soft: #fbe9ee;
@@ -40,7 +42,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0e141c; --surface: #151d28; --surface-2: #1a2431; --ink: #e4eaf2; --muted: #93a1b3; --line: #2a3646;
-    --accent: #7ea2ff; --accent-soft: #1d2a47; --accent-ink: #0e141c; --soon: #f0b25a; --soon-soft: #3a2a12; --past: #6b7787;
+    --accent: #7ea2ff; --accent-soft: #1d2a47; --accent-ink: #0e141c; --soon: #f0b25a; --soon-soft: #3a2a12; --urgent: #ff7a70; --urgent-soft: #3e1a18; --past: #6b7787;
     --holiday: #f08aa2; --holiday-soft: #3a1c25;
     --u-fund: #4cc7b9; --u-pentest: #ff8a72; --u-nsda: #7ea2ff; --u-automate: #b896f5; --u-project: #e8b057; --u-wit: #8ccf78; --u-general: #93a1b3;
     color-scheme: dark;
@@ -48,7 +50,7 @@
 }
 :root[data-theme="dark"] {
   --bg: #0e141c; --surface: #151d28; --surface-2: #1a2431; --ink: #e4eaf2; --muted: #93a1b3; --line: #2a3646;
-  --accent: #7ea2ff; --accent-soft: #1d2a47; --accent-ink: #0e141c; --soon: #f0b25a; --soon-soft: #3a2a12; --past: #6b7787;
+  --accent: #7ea2ff; --accent-soft: #1d2a47; --accent-ink: #0e141c; --soon: #f0b25a; --soon-soft: #3a2a12; --urgent: #ff7a70; --urgent-soft: #3e1a18; --past: #6b7787;
   --holiday: #f08aa2; --holiday-soft: #3a1c25;
   --u-fund: #4cc7b9; --u-pentest: #ff8a72; --u-nsda: #7ea2ff; --u-automate: #b896f5; --u-project: #e8b057; --u-wit: #8ccf78; --u-general: #93a1b3;
   color-scheme: dark;
@@ -107,6 +109,21 @@ h1 {
 }
 .next-due b { color: var(--soon); font: 600 12px/1 var(--f-mono); text-transform: uppercase; letter-spacing: .06em; }
 .next-due:hover { outline: 1px solid var(--soon); }
+.next-due.urgent { background: var(--urgent-soft); box-shadow: inset 0 0 0 1px var(--urgent); }
+.next-due.urgent b { color: var(--urgent); }
+.tab .n.urgent { background: var(--urgent); color: var(--surface); }
+.alert {
+  display: grid; gap: 8px; margin: 0 0 14px; padding: 14px 16px 14px 20px; border-radius: 10px; position: relative;
+  background: var(--urgent-soft); color: var(--ink); box-shadow: inset 0 0 0 1px var(--urgent);
+}
+.alert::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; border-radius: 10px 0 0 10px; background: var(--urgent); }
+.alert-h { font: 800 17px/1.2 var(--f-display); font-stretch: 90%; color: var(--urgent); }
+.alert ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+.alert li { font-size: 14.5px; }
+.alert li b { font-family: var(--f-mono); font-size: 13px; color: var(--urgent); margin-right: 6px; }
+.alert .sub { font-size: 13.5px; color: var(--muted); }
+.submit-box { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; font-size: 14.5px; }
+.submit-box a { font-weight: 600; }
 @media (max-width: 760px) { .next-due { margin-left: 0; width: 100%; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .next-due b { margin-right: 6px; } }
 
 .strip { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
@@ -119,6 +136,7 @@ h1 {
 .wk .b { font-size: 10.5px; color: var(--muted); }
 .wk.past { opacity: .55; }
 .wk.has-due { box-shadow: inset 0 -3px 0 var(--soon); }
+.wk.has-urgent { box-shadow: inset 0 -4px 0 var(--urgent); }
 .wk.cur { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); opacity: 1; }
 .wk.cur .b { color: var(--accent-ink); opacity: .85; }
 .wk-gap { flex: 0 0 auto; align-self: center; font: 500 10.5px/1.2 var(--f-mono); color: var(--muted); padding: 0 4px; text-align: center; max-width: 64px; }
@@ -152,6 +170,7 @@ h1 {
 .flag { font: 600 11px/1 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; padding: 5px 8px; border-radius: 5px; }
 .flag.now { background: var(--accent-ink); color: var(--accent); }
 .flag.due { background: var(--soon-soft); color: var(--soon); }
+.flag.due.urgent { background: var(--urgent); color: var(--surface); }
 .flag.hol { background: var(--holiday-soft); color: var(--holiday); }
 .chev { width: 10px; height: 10px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; opacity: .6; transform: rotate(45deg); margin-left: 4px; transition: transform .15s; align-self: center; }
 .week[open] .chev { transform: rotate(-135deg); }
@@ -204,6 +223,9 @@ h1 {
 .row-note.hol .what { color: var(--holiday); font-weight: 600; }
 .row-note.duerow { background: var(--soon-soft); }
 .row-note.duerow .what b { color: var(--soon); }
+.row-note.duerow.urgent { background: var(--urgent-soft); box-shadow: inset 5px 0 0 var(--urgent); }
+.row-note.duerow.urgent .what b { color: var(--urgent); }
+.row-note.duerow .when { font: 600 12px/1 var(--f-mono); color: var(--urgent); margin-left: 6px; white-space: nowrap; }
 .row-note.duerow.past { background: var(--surface-2); opacity: .7; }
 .row-note.duerow.past .what b { color: var(--past); }
 .row-note.empty .what { color: var(--muted); font-style: italic; }
@@ -234,8 +256,9 @@ h1 {
 .due-unit { font-size: 13px; color: var(--muted); }
 .unit-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c); margin-right: 6px; vertical-align: 1px; }
 .count { justify-self: end; font: 600 12.5px/1 var(--f-mono); padding: 6px 9px; border-radius: 6px; background: var(--surface-2); color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.due-row.soon .count { background: var(--soon-soft); color: var(--soon); box-shadow: inset 0 0 0 1px var(--soon); }
-.due-row.today .count { background: var(--soon); color: var(--surface); }
+.due-row.soon { background: var(--urgent-soft); box-shadow: inset 5px 0 0 var(--urgent); }
+.due-row.soon .count, .due-row.today .count { background: var(--urgent); color: var(--surface); }
+.due-row.today { background: var(--urgent-soft); box-shadow: inset 5px 0 0 var(--urgent); }
 .due-row.past { opacity: .6; }
 .due-row.past .due-title { text-decoration: line-through; text-decoration-color: var(--past); }
 @media (max-width: 760px) {
@@ -267,6 +290,7 @@ h1 {
     </div>
   </header>
 
+  <div class="alert" id="alert" role="status" hidden></div>
   <div class="bar" id="bar" hidden>
     <div class="tabs" role="tablist">
       <button class="tab" type="button" role="tab" id="tab-schedule" data-view="schedule" aria-controls="view-schedule">Schedule</button>
@@ -413,11 +437,25 @@ h1 {
     // Due dates: counts, next-due strip, full tab
     var upcoming = assessments.filter(function (a) { return diffDays(parseDate(a.due), today) >= 0; });
     var nextA = upcoming[0];
-    document.getElementById("due-n").textContent = upcoming.length ? upcoming.length + " open" : "";
+    var isUrgent = function (a) { var l = diffDays(parseDate(a.due), today); return l >= 0 && l <= 7; };
+    var urgent = upcoming.filter(isUrgent);
+    var submit = c.submit && /^https:\/\//.test(c.submit.url || "") ? c.submit : null;
+    var submitLink = submit ? '<a href="' + esc(submit.url) + '" target="_blank" rel="noopener">' + esc(submit.name || submit.url) + ' <span aria-hidden="true">↗</span></a>' : "";
+    var dn = document.getElementById("due-n");
+    dn.textContent = urgent.length ? urgent.length + " due soon" : upcoming.length ? upcoming.length + " open" : "";
+    dn.classList.toggle("urgent", urgent.length > 0);
+    var al = document.getElementById("alert");
+    if (urgent.length) {
+      al.innerHTML = '<div class="alert-h">' + (urgent.length === 1 ? "Assessment due within 7 days" : urgent.length + " assessments due within 7 days") + "</div><ul>" +
+        urgent.map(function (a) { var l = diffDays(parseDate(a.due), today); return "<li><b>" + countdown(l).toUpperCase() + "</b>" + esc(a.title) + " · " + fmt(parseDate(a.due)) + "</li>"; }).join("") + "</ul>" +
+        (submit ? '<div class="sub">Submit on ' + submitLink + "</div>" : "");
+      al.hidden = false;
+    }
     var nd = document.getElementById("next-due");
     if (nextA) {
       var ld = diffDays(parseDate(nextA.due), today);
-      nd.innerHTML = "<b>Next due</b><span>" + esc(nextA.title) + "</span><span>· " + fmt(parseDate(nextA.due)) + " · " + countdown(ld) + "</span>";
+      nd.classList.toggle("urgent", ld <= 7);
+      nd.innerHTML = "<b>" + (ld <= 7 ? "Due soon" : "Next due") + "</b><span>" + esc(nextA.title) + "</span><span>· " + fmt(parseDate(nextA.due)) + " · " + countdown(ld) + "</span>";
       nd.hidden = false;
     }
     function dueRow(a) {
@@ -431,7 +469,7 @@ h1 {
         '<span class="count">' + countdown(left) + "</span></div>";
     }
     var closed = assessments.filter(function (a) { return diffDays(parseDate(a.due), today) < 0; });
-    var dueHtml = "";
+    var dueHtml = submit ? '<div class="submit-box"><b>Where to submit assessments:</b> ' + submitLink + "</div>" : "";
     dueHtml += "<div><h2>Upcoming</h2>" + (upcoming.length ? '<div class="due-table">' + upcoming.map(dueRow).join("") + "</div>" : '<div class="notice">Nothing due. All assessments have closed.</div>') + "</div>";
     if (closed.length) dueHtml += "<div><h2>Closed</h2><div class=\"due-table\">" + closed.map(dueRow).join("") + "</div></div>";
     document.getElementById("due-wrap").innerHTML = dueHtml;
@@ -441,7 +479,8 @@ h1 {
     weeks.forEach(function (w) {
       if (w.isBreak) { strip += '<span class="wk-gap">' + esc(w.br.name) + "</span>"; return; }
       var hasDue = assessments.some(function (a) { return weekOf(a.due) === w.n; });
-      strip += '<button class="wk' + (w.n === current ? " cur" : "") + (w.sun < today ? " past" : "") + (hasDue ? " has-due" : "") + '" type="button" data-week="' + w.n + '" title="Week ' + w.n + (hasDue ? " · assessment due" : "") + '">' +
+      var hasUrgent = urgent.some(function (a) { return weekOf(a.due) === w.n; });
+      strip += '<button class="wk' + (w.n === current ? " cur" : "") + (w.sun < today ? " past" : "") + (hasDue ? " has-due" : "") + (hasUrgent ? " has-urgent" : "") + '" type="button" data-week="' + w.n + '" title="Week ' + w.n + (hasDue ? " · assessment due" : "") + '">' +
         '<span class="a">W' + w.n + '</span><span class="b">' + w.mon.getDate() + " " + MON[w.mon.getMonth()] + "</span></button>";
     });
     document.getElementById("strip").innerHTML = strip;
@@ -471,7 +510,7 @@ h1 {
 
       var isPast = w.sun < today, isCur = w.n === current, flags = "";
       if (isCur) flags += '<span class="flag now">' + (today < w.mon ? (w.n === 1 ? "Starts here" : "Up next") : "This week") + "</span>";
-      if (dues.length) flags += '<span class="flag due">' + dues.length + " due</span>";
+      if (dues.length) flags += '<span class="flag due' + (dues.some(isUrgent) ? " urgent" : "") + '">' + dues.length + " due</span>";
       if (rows.some(function (r) { return r.kind === "hol"; })) flags += '<span class="flag hol">Public holiday</span>';
 
       var body = "";
@@ -480,7 +519,7 @@ h1 {
         if (r.kind === "hol") {
           body += '<div class="row-note hol" data-unit="any">' + dayCell(d) + '<div class="what">Public holiday: ' + esc(r.name) + " · no class</div></div>";
         } else if (r.kind === "due") {
-          body += '<div class="row-note duerow' + (d < today ? " past" : "") + '" data-unit="' + esc(r.a.unit) + '">' + dayCell(d) + '<div class="what"><b>Due</b> · ' + esc(r.a.title) + (r.a.note ? ' <span style="color:var(--muted)">(' + esc(r.a.note) + ")</span>" : "") + (folderUrl(r.a.unit, "assessmentFolder") ? " " + folderLink(r.a.unit, "Assessment documents", "assessmentFolder") : "") + "</div></div>";
+          body += '<div class="row-note duerow' + (d < today ? " past" : "") + (isUrgent(r.a) ? " urgent" : "") + '" data-unit="' + esc(r.a.unit) + '">' + dayCell(d) + '<div class="what"><b>Due</b> · ' + esc(r.a.title) + (r.a.note ? ' <span style="color:var(--muted)">(' + esc(r.a.note) + ")</span>" : "") + (folderUrl(r.a.unit, "assessmentFolder") ? " " + folderLink(r.a.unit, "Assessment documents", "assessmentFolder") : "") + (isUrgent(r.a) ? '<span class="when">' + countdown(diffDays(d, today)) + "</span>" : "") + (submit && d >= today ? ' · <a href="' + esc(submit.url) + '" target="_blank" rel="noopener">Submit ↗</a>' : "") + "</div></div>";
         } else {
           var s = r.s, hl = s === hlSession, cols = "";
           [["Topics", s.topics], ["In class", s.activities], ["Extra / home task", s.homework]].forEach(function (p) {

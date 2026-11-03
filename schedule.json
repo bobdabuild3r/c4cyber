@@ -15,7 +15,10 @@
       "name": "TDC learning platform",
       "url": "https://www.studytafensw.edu.au/"
     },
-    "reminder": "Don't forget your WIT units: ICTICT443 · BSBWHS309 · VU23223"
+    "submit": {
+      "name": "studytafensw.edu.au",
+      "url": "https://www.studytafensw.edu.au/"
+    }
   },
   "units": [
     {
