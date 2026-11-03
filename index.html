@@ -305,8 +305,8 @@ h1 {
   <div class="alert" id="alert" role="status" hidden></div>
   <div class="bar" id="bar" hidden>
     <div class="tabs" role="tablist">
-      <button class="tab" type="button" role="tab" id="tab-schedule" data-view="schedule" aria-controls="view-schedule">Schedule</button>
-      <button class="tab" type="button" role="tab" id="tab-due" data-view="due" aria-controls="view-due">Due dates <span class="n" id="due-n"></span></button>
+      <button class="tab" type="button" role="tab" id="tab-schedule" data-view="schedule" aria-controls="view-schedule">Delivery Schedule</button>
+      <button class="tab" type="button" role="tab" id="tab-due" data-view="due" aria-controls="view-due">Assessment due dates <span class="n" id="due-n"></span></button>
       <a class="next-due" id="next-due" href="#due" hidden></a>
     </div>
     <div class="strip" id="strip" aria-label="Jump to week"></div>
@@ -501,7 +501,7 @@ h1 {
     if (nextA) {
       var ld = diffDays(parseDate(nextA.due), today);
       nd.classList.toggle("urgent", ld <= 7);
-      nd.innerHTML = "<b>" + (ld <= 7 ? "Due soon" : "Next due") + "</b><span>" + esc(nextA.title) + "</span><span>· " + fmt(parseDate(nextA.due)) + " · " + countdown(ld) + "</span>";
+      nd.innerHTML = "<b>Upcoming assessment due</b><span>" + esc(nextA.title) + "</span><span>· " + fmt(parseDate(nextA.due)) + " · " + countdown(ld) + "</span>";
       nd.hidden = false;
     }
     function dueRow(a) {
