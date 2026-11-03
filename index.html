@@ -186,6 +186,9 @@ h1 {
 .txt p { margin: 0 0 8px; }
 .txt p:last-child { margin-bottom: 0; }
 .txt hr { border: 0; border-top: 1px dashed var(--line); margin: 8px 0; }
+.lab-link { text-decoration: none; }
+.lab-link code { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.lab-link:hover code { text-decoration: underline; }
 .txt code { font: 500 12.5px/1.4 var(--f-mono); background: var(--surface-2); border: 1px solid var(--line); padding: 1px 5px; border-radius: 4px; }
 @media (max-width: 760px) {
   .cols { grid-template-columns: minmax(0, 1fr); gap: 12px; }
@@ -330,7 +333,11 @@ h1 {
       var parts = lines.map(function (l) {
         if (/^-{3,}$/.test(l)) return "<hr>";
         var m = l.match(/^(C\dT\d+L\d+\w*)(.*)$/);
-        return m ? "<code>" + esc(m[1]) + "</code>" + linkify(m[2]) : linkify(l);
+        if (!m) return linkify(l);
+        var lf = labFolders.filter(function (x) { return m[1].indexOf(x.prefix + "T") === 0; })[0];
+        var code = "<code>" + esc(m[1]) + "</code>";
+        if (lf) code = '<a class="lab-link" href="' + esc(lf.url) + '" target="_blank" rel="noopener" title="Open lab folder">' + code + "</a>";
+        return code + linkify(m[2]);
       });
       html += "<p>" + parts.join("<br>").replace(/<br><hr><br>/g, "<hr>").replace(/^<hr><br>|<br><hr>$/g, "<hr>") + "</p>";
     });
@@ -341,6 +348,7 @@ h1 {
     return l[0] || "";
   }
 
+  var labFolders = []; // [{prefix: "C1", url}] from units with "labPrefix" and "folder"
   var filter = "all";
   try { filter = localStorage.getItem("cert4-filter") || "all"; } catch (e) {}
 
@@ -351,6 +359,7 @@ h1 {
     var unitName = function (id) { return units[id] ? units[id].name : "General"; };
     // Link to the unit's OneDrive folder (set "folder" on a unit in schedule.json); nothing shows until it is set
     var folderUrl = function (id) { var u = units[id]; return u && /^https:\/\//.test(u.folder || "") ? u.folder : ""; };
+    labFolders = (data.units || []).filter(function (u) { return u.labPrefix && folderUrl(u.id); }).map(function (u) { return { prefix: u.labPrefix, url: folderUrl(u.id) }; });
     var folderLink = function (id, label) { var f = folderUrl(id); return f ? '<a class="folder-link" href="' + esc(f) + '" target="_blank" rel="noopener">' + label + ' <span aria-hidden="true">↗</span></a>' : ""; };
     var start = parseDate(c.start), end = parseDate(c.end);
     var classDays = (c.classDays || ["Mon", "Tue", "Thu"]).map(function (d) { return DOW.indexOf(d); });

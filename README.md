@@ -50,6 +50,8 @@ Once a link is set, students see:
 - **Documents ↗** on that unit's due-date row, and **Assessment documents ↗** in the Due dates tab
 - **Open <unit> folder ↗** next to the filter buttons when they filter to that unit
 
+Lab codes also become links to their unit's folder, using the unit's `"labPrefix"`: `C1` labs → Fundamentals, `C2` → Network and Web Pentesting, `C3` → Network Security and Data Analysis, `C4` → Automate Pentesting.
+
 A unit with an empty `"folder"` shows no button. The link must start with `https://`.
 Only students you have shared the folder with in OneDrive can open it.
 

@@ -22,25 +22,29 @@
       "id": "fund",
       "name": "Fundamentals of Cyber Security",
       "codes": "VU23213, VU23214, VU23217",
-      "folder": ""
+      "folder": "https://tafensw-my.sharepoint.com/:f:/r/personal/pravesh_dahal2_tafensw_edu_au/Documents/2.%20Cert%20IV%20Cyber-%20Everything/2.%20Labs/1.%20Fundamentals%20of%20Cyber%20Security_Cloudlabs?d=wc6963d309e744415ad62d9a50c2dec5e&csf=1&web=1&e=MKbGI7",
+      "labPrefix": "C1"
     },
     {
       "id": "pentest",
       "name": "Network and Web Pentesting",
       "codes": "VU23215, VU23222",
-      "folder": ""
+      "folder": "",
+      "labPrefix": "C2"
     },
     {
       "id": "nsda",
       "name": "Network Security and Data Analysis",
       "codes": "VU23216, VU23218",
-      "folder": ""
+      "folder": "",
+      "labPrefix": "C3"
     },
     {
       "id": "automate",
       "name": "Automate Pentesting",
       "codes": "ICTPRG434, VU23226",
-      "folder": ""
+      "folder": "",
+      "labPrefix": "C4"
     },
     {
       "id": "project",
