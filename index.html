@@ -237,10 +237,10 @@ h1 {
 @media (max-width: 760px) { .row-note { grid-template-columns: 56px minmax(0, 1fr); gap: 12px; padding: 12px 14px; } }
 
 .break { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; padding: 14px 18px; border: 1px dashed var(--line); border-radius: 12px; color: var(--muted); }
-.break b { font: 800 18px/1 var(--f-display); font-stretch: 85%; color: var(--ink); }
-.break span { font: 500 13px/1 var(--f-mono); }
-.break-due { flex-basis: 100%; font: 500 14px/1.4 var(--f-body) !important; color: var(--ink); }
-.break-due b { font: 600 12px/1 var(--f-mono) !important; color: var(--soon) !important; text-transform: uppercase; margin-right: 4px; }
+.break > b { font: 800 18px/1 var(--f-display); font-stretch: 85%; color: var(--ink); }
+.break > span { font: 500 13px/1 var(--f-mono); }
+.break-dues { flex-basis: 100%; color: var(--ink); border-radius: 8px; overflow: hidden; border: 1px solid var(--line); }
+.break-dues .row-note:first-child { border-top: 0; }
 .endmark { text-align: center; padding: 18px; font: 800 20px/1.2 var(--f-display); font-stretch: 85%; color: var(--muted); }
 
 /* Due dates tab */
@@ -607,13 +607,16 @@ h1 {
     var partTotals = {};
     sessions.forEach(function (x) { var t = splitTopics(x.topics); if (t.part) { var k = x.unit + "|" + t.heads.join("|"); partTotals[k] = (partTotals[k] || 0) + 1; } });
 
+    // One due-date row (same look in a teaching week and on a holiday banner)
+    function dueRowHtml(a, d) { var r = { a: a }; return '<div class="row-note duerow' + (d < today ? " past" : "") + (isUrgent(a) ? " urgent" : "") + '" data-unit="' + esc(a.unit) + '">' + dayCell(d) + '<div class="what"><b>Due</b> · ' + esc(a.title) + (a.note ? ' <span style="color:var(--muted)">(' + esc(a.note) + ")</span>" : "") + (folderUrl(a.unit, "assessmentFolder") ? " " + folderLink(a.unit, "Assessment documents", "assessmentFolder") : "") + (isUrgent(a) ? '<span class="when">' + countdown(diffDays(d, today)) + "</span>" : "") + (submit && d >= today ? ' · <a href="' + esc(submit.url) + '" target="_blank" rel="noopener">Submit ↗</a>' : "") + "</div></div>"; }
+
     // Weeks
     var html = "";
     weeks.forEach(function (w) {
       if (w.isBreak) {
         var bDue = assessments.filter(function (a) { return breakOf(a.due) === w.br; });
         html += '<div class="break"><b>' + esc(w.br.name) + "</b><span>" + fmt(w.br.s) + " – " + fmt(w.br.e) + "</span><span>No classes</span>" +
-          bDue.map(function (a) { return '<span class="break-due"><b>Due ' + fmt(parseDate(a.due)) + "</b> · " + esc(a.title) + "</span>"; }).join("") + "</div>";
+          (bDue.length ? '<div class="break-dues">' + bDue.map(function (a) { return dueRowHtml(a, parseDate(a.due)); }).join("") + "</div>" : "") + "</div>";
         return;
       }
       var rows = [];
@@ -637,7 +640,7 @@ h1 {
         if (r.kind === "hol") {
           body += '<div class="row-note hol" data-unit="any">' + dayCell(d) + '<div class="what">Public holiday: ' + esc(r.name) + " · no class</div></div>";
         } else if (r.kind === "due") {
-          body += '<div class="row-note duerow' + (d < today ? " past" : "") + (isUrgent(r.a) ? " urgent" : "") + '" data-unit="' + esc(r.a.unit) + '">' + dayCell(d) + '<div class="what"><b>Due</b> · ' + esc(r.a.title) + (r.a.note ? ' <span style="color:var(--muted)">(' + esc(r.a.note) + ")</span>" : "") + (folderUrl(r.a.unit, "assessmentFolder") ? " " + folderLink(r.a.unit, "Assessment documents", "assessmentFolder") : "") + (isUrgent(r.a) ? '<span class="when">' + countdown(diffDays(d, today)) + "</span>" : "") + (submit && d >= today ? ' · <a href="' + esc(submit.url) + '" target="_blank" rel="noopener">Submit ↗</a>' : "") + "</div></div>";
+          body += dueRowHtml(r.a, d);
         } else {
           var s = r.s, hl = s === hlSession, cols = "";
           var tp = splitTopics(s.topics), partTag = "";
