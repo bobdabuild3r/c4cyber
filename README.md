@@ -30,11 +30,28 @@ All content lives in `schedule.json`. The page (`index.html`) never needs editin
 | Public holidays | `"holidays"` |
 | Holiday breaks (no teaching week) | `"breaks"` |
 | Course start/end, reminder text, platform link | `"course"` |
+| OneDrive folder for a unit | `"units"` → `"folder"` |
 | "Last updated" note at the bottom | `"updated"` |
 
 - An optional `"note"` on an assessment shows under the due date.
 - In text, use `\n` for a new line. The file already does this, so copy an existing line's style.
 - Week numbers, the "this week" highlight, countdowns and holiday rows are worked out automatically from the dates.
+
+## Add the OneDrive folder links
+
+Each unit in `schedule.json` has a `"folder"` line. Paste the unit's OneDrive folder link between the quotes:
+
+```json
+{ "id": "nsda", "name": "Network Security and Data Analysis", "codes": "VU23216, VU23218", "folder": "https://..." }
+```
+
+Once a link is set, students see:
+- **Unit files ↗** on every class of that unit
+- **Documents ↗** on that unit's due-date row, and **Assessment documents ↗** in the Due dates tab
+- **Open <unit> folder ↗** next to the filter buttons when they filter to that unit
+
+A unit with an empty `"folder"` shows no button. The link must start with `https://`.
+Only students you have shared the folder with in OneDrive can open it.
 
 ## If the page says "formatting mistake"
 

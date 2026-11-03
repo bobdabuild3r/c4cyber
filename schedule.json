@@ -20,32 +20,38 @@
     {
       "id": "fund",
       "name": "Fundamentals of Cyber Security",
-      "codes": "VU23213, VU23214, VU23217"
+      "codes": "VU23213, VU23214, VU23217",
+      "folder": ""
     },
     {
       "id": "pentest",
       "name": "Network and Web Pentesting",
-      "codes": "VU23215, VU23222"
+      "codes": "VU23215, VU23222",
+      "folder": ""
     },
     {
       "id": "nsda",
       "name": "Network Security and Data Analysis",
-      "codes": "VU23216, VU23218"
+      "codes": "VU23216, VU23218",
+      "folder": ""
     },
     {
       "id": "automate",
       "name": "Automate Pentesting",
-      "codes": "ICTPRG434, VU23226"
+      "codes": "ICTPRG434, VU23226",
+      "folder": ""
     },
     {
       "id": "project",
       "name": "Cyber Project",
-      "codes": "BSBINS401, VU23219, VU23220, VU23221"
+      "codes": "BSBINS401, VU23219, VU23220, VU23221",
+      "folder": ""
     },
     {
       "id": "wit",
       "name": "WIT units",
-      "codes": "ICTICT443, BSBWHS309, VU23223"
+      "codes": "ICTICT443, BSBWHS309, VU23223",
+      "folder": ""
     },
     {
       "id": "general",

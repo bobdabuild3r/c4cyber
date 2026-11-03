@@ -170,6 +170,14 @@ h1 {
 .unit-tag { display: inline-flex; align-items: center; gap: 6px; font: 600 12px/1 var(--f-mono); letter-spacing: .04em; text-transform: uppercase; color: var(--c); }
 .unit-tag::before { content: ""; width: 9px; height: 9px; border-radius: 2px; background: var(--c); }
 .pill { font: 600 11px/1 var(--f-mono); text-transform: uppercase; letter-spacing: .06em; background: var(--accent); color: var(--accent-ink); padding: 5px 7px; border-radius: 4px; }
+.folder-link {
+  display: inline-flex; align-items: center; gap: 4px; font: 600 12px/1 var(--f-body); color: var(--accent);
+  border: 1px solid var(--line); background: var(--surface); border-radius: 6px; padding: 5px 8px; text-decoration: none; white-space: nowrap;
+}
+.folder-link:hover { border-color: var(--accent); background: var(--accent-soft); }
+.s-head .folder-link { margin-left: auto; }
+.due-row .folder-link { margin-top: 8px; }
+.toolbar .folder-link { font-size: 13px; padding: 8px 11px; }
 .s-title { margin: 6px 0 12px; font: 700 19px/1.25 var(--f-display); font-stretch: 92%; text-wrap: balance; }
 .cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
 .cols > div { min-width: 0; }
@@ -212,6 +220,7 @@ h1 {
   padding: 14px 18px; border-top: 1px solid var(--line); color: inherit; text-decoration: none;
 }
 .due-row:first-child { border-top: 0; }
+.due-row { cursor: pointer; }
 .due-row:hover { background: var(--surface-2); }
 .due-row.next { background: var(--soon-soft); }
 .due-date { font-family: var(--f-mono); font-variant-numeric: tabular-nums; line-height: 1.1; }
@@ -268,6 +277,7 @@ h1 {
     <div class="toolbar" id="toolbar" hidden>
       <span class="label">Show</span>
       <div id="chips" style="display:contents"></div>
+      <a class="folder-link" id="unit-folder" target="_blank" rel="noopener" hidden></a>
       <span class="reminder" id="reminder" hidden></span>
     </div>
     <div class="weeks" id="weeks"><div class="notice">Loading the schedule…</div></div>
@@ -339,6 +349,9 @@ h1 {
     var units = {}; (data.units || []).forEach(function (u) { units[u.id] = u; });
     var unitColor = function (id) { return "var(--u-" + (units[id] ? id : "general") + ")"; };
     var unitName = function (id) { return units[id] ? units[id].name : "General"; };
+    // Link to the unit's OneDrive folder (set "folder" on a unit in schedule.json); nothing shows until it is set
+    var folderUrl = function (id) { var u = units[id]; return u && /^https:\/\//.test(u.folder || "") ? u.folder : ""; };
+    var folderLink = function (id, label) { var f = folderUrl(id); return f ? '<a class="folder-link" href="' + esc(f) + '" target="_blank" rel="noopener">' + label + ' <span aria-hidden="true">↗</span></a>' : ""; };
     var start = parseDate(c.start), end = parseDate(c.end);
     var classDays = (c.classDays || ["Mon", "Tue", "Thu"]).map(function (d) { return DOW.indexOf(d); });
 
@@ -399,11 +412,11 @@ h1 {
       var d = parseDate(a.due), left = diffDays(d, today), wk = weekOf(a.due);
       var cls = left < 0 ? "past" : left === 0 ? "today" : left <= 7 ? "soon" : "";
       if (a === nextA) cls += " next";
-      return '<a class="due-row ' + cls + '" href="#schedule" data-week="' + (wk || "") + '" data-unit="' + esc(a.unit) + '">' +
+      return '<div class="due-row ' + cls + '" role="link" tabindex="0" data-week="' + (wk || "") + '" data-unit="' + esc(a.unit) + '">' +
         '<div class="due-date"><span class="m">' + DOW[d.getDay()] + '</span><span class="d">' + d.getDate() + '</span><span class="m">' + MON[d.getMonth()] + "</span></div>" +
-        '<div><div class="due-title">' + esc(a.title) + "</div>" + (a.note ? '<div class="due-note">' + esc(a.note) + "</div>" : "") + "</div>" +
+        '<div><div class="due-title">' + esc(a.title) + "</div>" + (a.note ? '<div class="due-note">' + esc(a.note) + "</div>" : "") + folderLink(a.unit, "Assessment documents") + "</div>" +
         '<div class="due-unit"><span class="unit-dot" style="--c:' + unitColor(a.unit) + '"></span>' + esc(unitName(a.unit)) + (wk ? " · Week " + wk : "") + "</div>" +
-        '<span class="count">' + countdown(left) + "</span></a>";
+        '<span class="count">' + countdown(left) + "</span></div>";
     }
     var closed = assessments.filter(function (a) { return diffDays(parseDate(a.due), today) < 0; });
     var dueHtml = "";
@@ -455,7 +468,7 @@ h1 {
         if (r.kind === "hol") {
           body += '<div class="row-note hol" data-unit="any">' + dayCell(d) + '<div class="what">Public holiday: ' + esc(r.name) + " · no class</div></div>";
         } else if (r.kind === "due") {
-          body += '<div class="row-note duerow' + (d < today ? " past" : "") + '" data-unit="' + esc(r.a.unit) + '">' + dayCell(d) + '<div class="what"><b>Due</b> · ' + esc(r.a.title) + (r.a.note ? ' <span style="color:var(--muted)">(' + esc(r.a.note) + ")</span>" : "") + "</div></div>";
+          body += '<div class="row-note duerow' + (d < today ? " past" : "") + '" data-unit="' + esc(r.a.unit) + '">' + dayCell(d) + '<div class="what"><b>Due</b> · ' + esc(r.a.title) + (r.a.note ? ' <span style="color:var(--muted)">(' + esc(r.a.note) + ")</span>" : "") + (folderUrl(r.a.unit) ? " " + folderLink(r.a.unit, "Documents") : "") + "</div></div>";
         } else {
           var s = r.s, hl = s === hlSession, cols = "";
           [["Topics", s.topics], ["In class", s.activities], ["Extra / home task", s.homework]].forEach(function (p) {
@@ -463,7 +476,7 @@ h1 {
           });
           body += '<article class="session' + (hl ? " hl" : "") + '"' + (hl ? ' id="now"' : "") + ' data-unit="' + esc(s.unit) + '">' + dayCell(d) + "<div>" +
             '<div class="s-head"><span class="unit-tag" style="--c:' + unitColor(s.unit) + '">' + esc(unitName(s.unit)) + "</span>" +
-            (hl ? '<span class="pill">' + (hlIsToday ? "Today" : "Next class") + "</span>" : "") + "</div>" +
+            (hl ? '<span class="pill">' + (hlIsToday ? "Today" : "Next class") + "</span>" : "") + folderLink(s.unit, "Unit files") + "</div>" +
             '<h3 class="s-title">' + esc(s.title || firstLine(s.topics)) + "</h3>" + (cols ? '<div class="cols">' + cols + "</div>" : "") + "</div></article>";
         }
       });
@@ -481,6 +494,9 @@ h1 {
     // Filter
     function applyFilter() {
       chips.querySelectorAll(".chip").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-f") === filter ? "true" : "false"); });
+      var uf = document.getElementById("unit-folder"), fu = filter !== "all" ? folderUrl(filter) : "";
+      uf.hidden = !fu;
+      if (fu) { uf.href = fu; uf.innerHTML = "Open " + esc(unitName(filter)) + ' folder <span aria-hidden="true">↗</span>'; }
       document.querySelectorAll("#weeks [data-unit]").forEach(function (el) {
         var u = el.getAttribute("data-unit");
         el.classList.toggle("is-hidden", filter !== "all" && u !== filter && u !== "any");
@@ -520,10 +536,14 @@ h1 {
     });
     window.addEventListener("hashchange", function () { show(location.hash === "#due" ? "due" : "schedule"); });
     document.getElementById("strip").addEventListener("click", function (e) { var b = e.target.closest(".wk"); if (b) goWeek(b.getAttribute("data-week"), true); });
-    document.getElementById("due-wrap").addEventListener("click", function (e) {
+    function openDueRow(e) {
+      if (e.target.closest("a")) return; // let the OneDrive link open
       var a = e.target.closest(".due-row"); if (!a || !a.getAttribute("data-week")) return;
-      e.preventDefault(); goWeek(a.getAttribute("data-week"), false);
-    });
+      if (e.type === "keydown" && e.key !== "Enter") return;
+      e.preventDefault(); history.replaceState(null, "", "#schedule"); goWeek(a.getAttribute("data-week"), false);
+    }
+    document.getElementById("due-wrap").addEventListener("click", openDueRow);
+    document.getElementById("due-wrap").addEventListener("keydown", openDueRow);
     nd.addEventListener("click", function (e) { e.preventDefault(); history.replaceState(null, "", "#due"); show("due"); window.scrollTo({ top: 0 }); });
 
     show(location.hash === "#due" ? "due" : "schedule");
