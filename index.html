@@ -281,6 +281,7 @@ h1 {
       <span class="label">Show</span>
       <div id="chips" style="display:contents"></div>
       <a class="folder-link" id="unit-folder" target="_blank" rel="noopener" hidden></a>
+      <a class="folder-link" id="unit-assess" target="_blank" rel="noopener" hidden></a>
       <span class="reminder" id="reminder" hidden></span>
     </div>
     <div class="weeks" id="weeks"><div class="notice">Loading the schedule…</div></div>
@@ -324,7 +325,7 @@ h1 {
     }
     return out + esc(line.slice(last));
   }
-  function renderText(t) {
+  function renderText(t, unit) {
     if (!t || !String(t).trim()) return "";
     var html = "";
     String(t).split(/\n\s*\n/).forEach(function (b) {
@@ -334,7 +335,7 @@ h1 {
         if (/^-{3,}$/.test(l)) return "<hr>";
         var m = l.match(/^(C\dT\d+L\d+\w*)(.*)$/);
         if (!m) return linkify(l);
-        var lf = labFolders.filter(function (x) { return m[1].indexOf(x.prefix + "T") === 0; })[0];
+        var lf = (unit && labFolders.filter(function (x) { return x.unit === unit; })[0]) || labFolders.filter(function (x) { return m[1].indexOf(x.prefix + "T") === 0; })[0];
         var code = "<code>" + esc(m[1]) + "</code>";
         if (lf) code = '<a class="lab-link" href="' + esc(lf.url) + '" target="_blank" rel="noopener" title="Open lab folder">' + code + "</a>";
         return code + linkify(m[2]);
@@ -348,7 +349,7 @@ h1 {
     return l[0] || "";
   }
 
-  var labFolders = []; // [{prefix: "C1", url}] from units with "labPrefix" and "folder"
+  var labFolders = []; // [{unit, prefix, url}] from units with "labsFolder"
   var filter = "all";
   try { filter = localStorage.getItem("cert4-filter") || "all"; } catch (e) {}
 
@@ -358,9 +359,10 @@ h1 {
     var unitColor = function (id) { return "var(--u-" + (units[id] ? id : "general") + ")"; };
     var unitName = function (id) { return units[id] ? units[id].name : "General"; };
     // Link to the unit's OneDrive folder (set "folder" on a unit in schedule.json); nothing shows until it is set
-    var folderUrl = function (id) { var u = units[id]; return u && /^https:\/\//.test(u.folder || "") ? u.folder : ""; };
-    labFolders = (data.units || []).filter(function (u) { return u.labPrefix && folderUrl(u.id); }).map(function (u) { return { prefix: u.labPrefix, url: folderUrl(u.id) }; });
-    var folderLink = function (id, label) { var f = folderUrl(id); return f ? '<a class="folder-link" href="' + esc(f) + '" target="_blank" rel="noopener">' + label + ' <span aria-hidden="true">↗</span></a>' : ""; };
+    // OneDrive links per unit: "labsFolder" and "assessmentFolder" in schedule.json (buttons stay hidden until set)
+    var folderUrl = function (id, key) { var u = units[id], v = u && u[key || "labsFolder"]; return /^https:\/\//.test(v || "") ? v : ""; };
+    labFolders = (data.units || []).filter(function (u) { return folderUrl(u.id); }).map(function (u) { return { unit: u.id, prefix: u.labPrefix || "", url: folderUrl(u.id) }; });
+    var folderLink = function (id, label, key) { var f = folderUrl(id, key); return f ? '<a class="folder-link" href="' + esc(f) + '" target="_blank" rel="noopener">' + label + ' <span aria-hidden="true">↗</span></a>' : ""; };
     var start = parseDate(c.start), end = parseDate(c.end);
     var classDays = (c.classDays || ["Mon", "Tue", "Thu"]).map(function (d) { return DOW.indexOf(d); });
 
@@ -424,7 +426,7 @@ h1 {
       if (a === nextA) cls += " next";
       return '<div class="due-row ' + cls + '" role="link" tabindex="0" data-week="' + (wk || "") + '" data-unit="' + esc(a.unit) + '">' +
         '<div class="due-date"><span class="m">' + DOW[d.getDay()] + '</span><span class="d">' + d.getDate() + '</span><span class="m">' + MON[d.getMonth()] + "</span></div>" +
-        '<div><div class="due-title">' + esc(a.title) + "</div>" + (a.note ? '<div class="due-note">' + esc(a.note) + "</div>" : "") + folderLink(a.unit, "Assessment documents") + "</div>" +
+        '<div><div class="due-title">' + esc(a.title) + "</div>" + (a.note ? '<div class="due-note">' + esc(a.note) + "</div>" : "") + folderLink(a.unit, "Assessment documents", "assessmentFolder") + "</div>" +
         '<div class="due-unit"><span class="unit-dot" style="--c:' + unitColor(a.unit) + '"></span>' + esc(unitName(a.unit)) + (wk ? " · Week " + wk : "") + "</div>" +
         '<span class="count">' + countdown(left) + "</span></div>";
     }
@@ -478,15 +480,15 @@ h1 {
         if (r.kind === "hol") {
           body += '<div class="row-note hol" data-unit="any">' + dayCell(d) + '<div class="what">Public holiday: ' + esc(r.name) + " · no class</div></div>";
         } else if (r.kind === "due") {
-          body += '<div class="row-note duerow' + (d < today ? " past" : "") + '" data-unit="' + esc(r.a.unit) + '">' + dayCell(d) + '<div class="what"><b>Due</b> · ' + esc(r.a.title) + (r.a.note ? ' <span style="color:var(--muted)">(' + esc(r.a.note) + ")</span>" : "") + (folderUrl(r.a.unit) ? " " + folderLink(r.a.unit, "Documents") : "") + "</div></div>";
+          body += '<div class="row-note duerow' + (d < today ? " past" : "") + '" data-unit="' + esc(r.a.unit) + '">' + dayCell(d) + '<div class="what"><b>Due</b> · ' + esc(r.a.title) + (r.a.note ? ' <span style="color:var(--muted)">(' + esc(r.a.note) + ")</span>" : "") + (folderUrl(r.a.unit, "assessmentFolder") ? " " + folderLink(r.a.unit, "Assessment documents", "assessmentFolder") : "") + "</div></div>";
         } else {
           var s = r.s, hl = s === hlSession, cols = "";
           [["Topics", s.topics], ["In class", s.activities], ["Extra / home task", s.homework]].forEach(function (p) {
-            if (p[1] && String(p[1]).trim()) cols += '<div><div class="col-h">' + p[0] + '</div><div class="txt">' + renderText(p[1]) + "</div></div>";
+            if (p[1] && String(p[1]).trim()) cols += '<div><div class="col-h">' + p[0] + '</div><div class="txt">' + renderText(p[1], s.unit) + "</div></div>";
           });
           body += '<article class="session' + (hl ? " hl" : "") + '"' + (hl ? ' id="now"' : "") + ' data-unit="' + esc(s.unit) + '">' + dayCell(d) + "<div>" +
             '<div class="s-head"><span class="unit-tag" style="--c:' + unitColor(s.unit) + '">' + esc(unitName(s.unit)) + "</span>" +
-            (hl ? '<span class="pill">' + (hlIsToday ? "Today" : "Next class") + "</span>" : "") + folderLink(s.unit, "Unit files") + "</div>" +
+            (hl ? '<span class="pill">' + (hlIsToday ? "Today" : "Next class") + "</span>" : "") + folderLink(s.unit, "Lab files") + "</div>" +
             '<h3 class="s-title">' + esc(s.title || firstLine(s.topics)) + "</h3>" + (cols ? '<div class="cols">' + cols + "</div>" : "") + "</div></article>";
         }
       });
@@ -504,9 +506,11 @@ h1 {
     // Filter
     function applyFilter() {
       chips.querySelectorAll(".chip").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-f") === filter ? "true" : "false"); });
-      var uf = document.getElementById("unit-folder"), fu = filter !== "all" ? folderUrl(filter) : "";
-      uf.hidden = !fu;
-      if (fu) { uf.href = fu; uf.innerHTML = "Open " + esc(unitName(filter)) + ' folder <span aria-hidden="true">↗</span>'; }
+      [["unit-folder", "labsFolder", "Lab files"], ["unit-assess", "assessmentFolder", "Assessment documents"]].forEach(function (x) {
+        var el = document.getElementById(x[0]), fu = filter !== "all" ? folderUrl(filter, x[1]) : "";
+        el.hidden = !fu;
+        if (fu) { el.href = fu; el.innerHTML = esc(unitName(filter)) + ": " + x[2] + ' <span aria-hidden="true">↗</span>'; }
+      });
       document.querySelectorAll("#weeks [data-unit]").forEach(function (el) {
         var u = el.getAttribute("data-unit");
         el.classList.toggle("is-hidden", filter !== "all" && u !== filter && u !== "any");

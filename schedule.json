@@ -22,41 +22,47 @@
       "id": "fund",
       "name": "Fundamentals of Cyber Security",
       "codes": "VU23213, VU23214, VU23217",
-      "folder": "https://tafensw-my.sharepoint.com/:f:/r/personal/pravesh_dahal2_tafensw_edu_au/Documents/2.%20Cert%20IV%20Cyber-%20Everything/2.%20Labs/1.%20Fundamentals%20of%20Cyber%20Security_Cloudlabs?d=wc6963d309e744415ad62d9a50c2dec5e&csf=1&web=1&e=MKbGI7",
-      "labPrefix": "C1"
+      "labPrefix": "C1",
+      "labsFolder": "https://tafensw-my.sharepoint.com/:f:/r/personal/pravesh_dahal2_tafensw_edu_au/Documents/2.%20Cert%20IV%20Cyber-%20Everything/2.%20Labs/1.%20Fundamentals%20of%20Cyber%20Security_Cloudlabs?d=wc6963d309e744415ad62d9a50c2dec5e&csf=1&web=1&e=MKbGI7",
+      "assessmentFolder": "https://tafensw-my.sharepoint.com/:f:/r/personal/pravesh_dahal2_tafensw_edu_au/Documents/2.%20Cert%20IV%20Cyber-%20Everything/3.%20Assessments/Fundamentals%20of%20Cyber%20Security?d=w4303807d53544d8c8f716e90f0c4e582&csf=1&web=1&e=zLLih0"
     },
     {
       "id": "pentest",
       "name": "Network and Web Pentesting",
       "codes": "VU23215, VU23222",
-      "folder": "",
-      "labPrefix": "C2"
+      "labPrefix": "C2",
+      "labsFolder": "https://tafensw-my.sharepoint.com/:f:/r/personal/pravesh_dahal2_tafensw_edu_au/Documents/2.%20Cert%20IV%20Cyber-%20Everything/2.%20Labs/2.%20Network%20and%20Web%20Pentesting_Cloudlabs?d=w91251d1f37f34eb9872cbbccdfcbba2d&csf=1&web=1&e=1CRPhF",
+      "assessmentFolder": "https://tafensw-my.sharepoint.com/:f:/r/personal/pravesh_dahal2_tafensw_edu_au/Documents/2.%20Cert%20IV%20Cyber-%20Everything/3.%20Assessments/Network%20and%20Web%20Pentesting?d=wa26ca836bb634266b9d1b74088f6c4b0&csf=1&web=1&e=Q1eRlD"
     },
     {
       "id": "nsda",
       "name": "Network Security and Data Analysis",
       "codes": "VU23216, VU23218",
-      "folder": "",
-      "labPrefix": "C3"
+      "labPrefix": "C3",
+      "labsFolder": "https://tafensw-my.sharepoint.com/:f:/r/personal/pravesh_dahal2_tafensw_edu_au/Documents/2.%20Cert%20IV%20Cyber-%20Everything/2.%20Labs/3.%20Network%20Security%20and%20DataAnalysis_Cloudlabs?d=w00c800eaaa184b1e98069c0f657c522f&csf=1&web=1&e=87bNxr",
+      "assessmentFolder": "https://tafensw-my.sharepoint.com/:f:/r/personal/pravesh_dahal2_tafensw_edu_au/Documents/2.%20Cert%20IV%20Cyber-%20Everything/3.%20Assessments/Net%20Sec%20and%20Data%20Analysis?d=w0153cf8d439745bf90b0ed2168c24746&csf=1&web=1&e=6i0Gde"
     },
     {
       "id": "automate",
       "name": "Automate Pentesting",
       "codes": "ICTPRG434, VU23226",
-      "folder": "",
-      "labPrefix": "C4"
+      "labPrefix": "C4",
+      "labsFolder": "https://tafensw-my.sharepoint.com/:f:/r/personal/pravesh_dahal2_tafensw_edu_au/Documents/2.%20Cert%20IV%20Cyber-%20Everything/2.%20Labs/4.%20Automate%20Pentesting_Cloudlabs?d=w482587f2f08946a4b57bdd5bac0f7b90&csf=1&web=1&e=gBcxqX",
+      "assessmentFolder": ""
     },
     {
       "id": "project",
       "name": "Cyber Project",
       "codes": "BSBINS401, VU23219, VU23220, VU23221",
-      "folder": ""
+      "labsFolder": "https://tafensw-my.sharepoint.com/:f:/r/personal/pravesh_dahal2_tafensw_edu_au/Documents/2.%20Cert%20IV%20Cyber-%20Everything/2.%20Labs/5.%20Cyber%20Project_Cloudlabs?d=wed4ddaa069e14e32906aaec843300535&csf=1&web=1&e=rS5yu9",
+      "assessmentFolder": ""
     },
     {
       "id": "wit",
       "name": "WIT units",
       "codes": "ICTICT443, BSBWHS309, VU23223",
-      "folder": ""
+      "labsFolder": "",
+      "assessmentFolder": ""
     },
     {
       "id": "general",

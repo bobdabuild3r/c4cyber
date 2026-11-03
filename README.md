@@ -30,30 +30,28 @@ All content lives in `schedule.json`. The page (`index.html`) never needs editin
 | Public holidays | `"holidays"` |
 | Holiday breaks (no teaching week) | `"breaks"` |
 | Course start/end, reminder text, platform link | `"course"` |
-| OneDrive folder for a unit | `"units"` → `"folder"` |
+| OneDrive folders for a unit | `"units"` → `"labsFolder"`, `"assessmentFolder"` |
 | "Last updated" note at the bottom | `"updated"` |
 
 - An optional `"note"` on an assessment shows under the due date.
 - In text, use `\n` for a new line. The file already does this, so copy an existing line's style.
 - Week numbers, the "this week" highlight, countdowns and holiday rows are worked out automatically from the dates.
 
-## Add the OneDrive folder links
+## OneDrive folder links
 
-Each unit in `schedule.json` has a `"folder"` line. Paste the unit's OneDrive folder link between the quotes:
+Each unit in `schedule.json` has two links. Paste a OneDrive folder link between the quotes:
 
 ```json
-{ "id": "nsda", "name": "Network Security and Data Analysis", "codes": "VU23216, VU23218", "folder": "https://..." }
+"labsFolder": "https://...",
+"assessmentFolder": "https://..."
 ```
 
-Once a link is set, students see:
-- **Unit files ↗** on every class of that unit
-- **Documents ↗** on that unit's due-date row, and **Assessment documents ↗** in the Due dates tab
-- **Open <unit> folder ↗** next to the filter buttons when they filter to that unit
+- `labsFolder`: every lab code (e.g. `C3T06L2`) in that unit's classes opens this folder, and each class shows **Lab files ↗**.
+- `assessmentFolder`: the unit's due-date rows show **Assessment documents ↗**.
+- Filtering to a unit shows both buttons next to the filters.
 
-Lab codes also become links to their unit's folder, using the unit's `"labPrefix"`: `C1` labs → Fundamentals, `C2` → Network and Web Pentesting, `C3` → Network Security and Data Analysis, `C4` → Automate Pentesting.
-
-A unit with an empty `"folder"` shows no button. The link must start with `https://`.
-Only students you have shared the folder with in OneDrive can open it.
+An empty link shows no button. Links must start with `https://`.
+Only students you have shared the folders with in OneDrive can open them.
 
 ## If the page says "formatting mistake"
 
