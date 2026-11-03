@@ -142,9 +142,9 @@
       "date": "2027-02-01",
       "unit": "general",
       "title": "Orientation",
-      "topics": "Orientation\nCourse Overview\nTeams Access\nMoodle/TDC Access\nIntroduction (Knowing each other)\n\n\nSign Up - TryHackMe  (https://tryhackme.com/)\nSign Up - Skillsforall (https://skillsforall.com/)",
+      "topics": "Orientation\nCourse Overview\nTeams Access\nMoodle/TDC Access\nIntroduction (Knowing each other)\n\nSign Up - TryHackMe  (https://tryhackme.com/)\nSign Up - Skillsforall (https://skillsforall.com/)",
       "activities": "",
-      "homework": "How to use TryHackMe (TryHackMe)\nOpenVPN (TryHackMe)\nStarting Out In Cyber Sec (TryHackMe)\nLearning Cyber Security (TryHackMe)\nVirtualisation  Basics (TryHackMe)\nSecurity Awareness (TryHackMe)\nCommon Attacks (TryHackMe)\nOffensive Security Intro (TryHackMe)\nIntroduction to Cybersecurity (Skillsforall)"
+      "homework": "How to use TryHackMe (TryHackMe)\nOpenVPN (TryHackMe)\nStarting Out In Cyber Sec (TryHackMe)\nLearning Cyber Security (TryHackMe)\nSecurity Awareness (TryHackMe)\nCommon Attacks (TryHackMe)\nOffensive Security Intro (TryHackMe)\nIntroduction to Cybersecurity (Skillsforall)"
     },
     {
       "date": "2027-02-02",
@@ -298,7 +298,7 @@
       "unit": "pentest",
       "topics": "Topic 12- Interception and manipulation with web proxy\nTopic 13- Enumerating the web app",
       "activities": "C2T12L1- SpiderProxyIntercept\nC2T13L1- NiktoWebEnumeration",
-      "homework": "Become a Hacker (TryHackMe)\n\nBurp Suite: Repeater (TryHackMe)"
+      "homework": "Burp Suite: Repeater (TryHackMe)"
     },
     {
       "date": "2027-03-25",
@@ -312,7 +312,7 @@
       "unit": "pentest",
       "topics": "Topic 14- Cross-Site Scripting (XSS)\nTopic 15- SQLi",
       "activities": "C2T14L1- XSS_Attacks\nC2T15L1- SQLi_InjectAttacks",
-      "homework": "Lesson Learned? (TryHackMe)\nSQLMAP (TryHackMe)\nNoSQL Injection Basics (TryHackMe)\n\nhttps://portswigger.net/web-security/sql-injection/lab-retrieve-hidden-data\n\nhttps://portswigger.net/web-security/sql-injection/lab-login-bypass"
+      "homework": "SQLMAP (TryHackMe)\nNoSQL Injection Basics (TryHackMe)\n\nhttps://portswigger.net/web-security/sql-injection/lab-retrieve-hidden-data\n\nhttps://portswigger.net/web-security/sql-injection/lab-login-bypass"
     },
     {
       "date": "2027-04-01",
@@ -348,7 +348,7 @@
       "unit": "automate",
       "topics": "Topic 1- Introduction to pentesting techniques and automation tools\n\nExplanation of Unit Automate Pentesting\n\nVulnerability Management\nVulnerabilty Scanning\nCVSS\nAPT & TTP\nATT&CK Framework (Navigator)\nCyber Kill Chain\nZero Trust Networking",
       "activities": "C4T01L1_ClientMWDefense",
-      "homework": "Vulnerabilites 101 (TryHackMe)\nIntro to Cyber Threat Intel (TryHackMe)\nCyber Scotland 2021 (TryHackMe)\nPython Basics (TryHackMe)\nPython Tutorial (W3schools)"
+      "homework": "Vulnerabilites 101 (TryHackMe)\nIntro to Cyber Threat Intel (TryHackMe)\nPython Basics (TryHackMe)\nPython Tutorial (W3schools)"
     },
     {
       "date": "2027-04-29",
@@ -487,7 +487,7 @@
       "date": "2027-06-15",
       "unit": "general",
       "title": "Extra practice",
-      "topics": "https://www.linkedin.com/learning/incident-handling-process-cybersecurity-labs-powered-by-hack-the-box?u=57684225\nEasy Peasy (TryHackMe)\nBrooklyn Nine Nine (TryHackMe)\nLazyAdmin (TryHackMe)",
+      "topics": "https://www.linkedin.com/learning/incident-handling-process-cybersecurity-labs-powered-by-hack-the-box?u=57684225\nEasy Peasy (TryHackMe)\nBrooklyn Nine Nine (TryHackMe)",
       "activities": "",
       "homework": ""
     },
@@ -495,7 +495,7 @@
       "date": "2027-06-17",
       "unit": "general",
       "title": "Extra practice",
-      "topics": "https://www.linkedin.com/learning/incident-handling-process-cybersecurity-labs-powered-by-hack-the-box?u=57684225\nEasy Peasy (TryHackMe)\nBrooklyn Nine Nine (TryHackMe)\nLazyAdmin (TryHackMe)",
+      "topics": "https://www.linkedin.com/learning/incident-handling-process-cybersecurity-labs-powered-by-hack-the-box?u=57684225\nEasy Peasy (TryHackMe)\nBrooklyn Nine Nine (TryHackMe)",
       "activities": "",
       "homework": ""
     }
@@ -505,7 +505,6 @@
     "OpenVPN": "https://tryhackme.com/room/openvpn",
     "Starting Out In Cyber Sec": "https://tryhackme.com/room/startingoutincybersec",
     "Learning Cyber Security": "https://tryhackme.com/room/beginnerpathintro",
-    "Virtualisation Basics": "https://tryhackme.com/room/virtualisationbasics",
     "Security Awareness": "https://tryhackme.com/room/securityawarenessintro",
     "Common Attacks": "https://tryhackme.com/room/commonattacks",
     "Offensive Security Intro": "https://tryhackme.com/room/offensivesecurityintro",
@@ -538,9 +537,7 @@
     "Junior Security Analyst Intro": "https://tryhackme.com/room/jrsecanalystintrouxo",
     "Splunk: Exploriing SPL": "https://tryhackme.com/room/splunkexploringspl",
     "Splunk: Exploring SPL": "https://tryhackme.com/room/splunkexploringspl",
-    "Become a Hacker": "https://tryhackme.com/room/becomeahacker",
     "Burp Suite: Repeater": "https://tryhackme.com/room/burpsuiterepeater",
-    "Lesson Learned?": "https://tryhackme.com/room/lessonlearned",
     "SQLMAP": "https://tryhackme.com/room/sqlmap",
     "NoSQL Injection Basics": "https://tryhackme.com/room/nosqlinjectiontutorial",
     "Corridor": "https://tryhackme.com/room/corridor",
@@ -556,7 +553,6 @@
     "Bolt": "https://tryhackme.com/room/bolt",
     "OpenVAS": "https://tryhackme.com/room/openvas",
     "Easy Peasy": "https://tryhackme.com/room/easypeasyctf",
-    "Brooklyn Nine Nine": "https://tryhackme.com/room/brooklynninenine",
-    "LazyAdmin": "https://tryhackme.com/room/lazyadmin"
+    "Brooklyn Nine Nine": "https://tryhackme.com/room/brooklynninenine"
   }
 }
