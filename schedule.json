@@ -1,5 +1,5 @@
 {
-  "version": "1.8",
+  "version": "1.9",
   "updated": "2026-11-03",
   "course": {
     "title": "22603VIC - Certificate IV in Cyber Security",
@@ -120,7 +120,7 @@
     {
       "title": "BSBWHS309 Contribute effectively to WHS communication and consultation processes",
       "unit": "wit",
-      "due": "2027-04-11"
+      "due": "2027-04-18"
     },
     {
       "title": "VU23223 Apply cyber security legislation, privacy and ethical practices",

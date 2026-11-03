@@ -239,6 +239,8 @@ h1 {
 .break { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; padding: 14px 18px; border: 1px dashed var(--line); border-radius: 12px; color: var(--muted); }
 .break b { font: 800 18px/1 var(--f-display); font-stretch: 85%; color: var(--ink); }
 .break span { font: 500 13px/1 var(--f-mono); }
+.break-due { flex-basis: 100%; font: 500 14px/1.4 var(--f-body) !important; color: var(--ink); }
+.break-due b { font: 600 12px/1 var(--f-mono) !important; color: var(--soon) !important; text-transform: uppercase; margin-right: 4px; }
 .endmark { text-align: center; padding: 18px; font: 800 20px/1.2 var(--f-display); font-stretch: 85%; color: var(--muted); }
 
 /* Due dates tab */
@@ -519,6 +521,7 @@ h1 {
       cur = addDays(cur, 7);
     }
     var totalWeeks = n, teach = weeks.filter(function (w) { return !w.isBreak; });
+    var breakOf = function (ds) { var d = parseDate(ds); return breaks.filter(function (b) { return d >= b.s && d <= b.e; })[0] || null; };
     var weekOf = function (ds) { var d = parseDate(ds); var w = teach.filter(function (w) { return d >= w.mon && d <= w.sun; })[0]; return w ? w.n : null; };
 
     // Where the schedule is now: current week, and the class to highlight (today's, else the next one)
@@ -570,7 +573,7 @@ h1 {
       return '<div class="due-row ' + cls + '" role="link" tabindex="0" data-week="' + (wk || "") + '" data-unit="' + esc(a.unit) + '">' +
         '<div class="due-date"><span class="m">' + DOW[d.getDay()] + '</span><span class="d">' + d.getDate() + '</span><span class="m">' + MON[d.getMonth()] + "</span></div>" +
         '<div><div class="due-title">' + esc(a.title) + "</div>" + (a.note ? '<div class="due-note">' + esc(a.note) + "</div>" : "") + folderLink(a.unit, "Assessment documents", "assessmentFolder") + "</div>" +
-        '<div class="due-unit"><span class="unit-dot" style="--c:' + unitColor(a.unit) + '"></span>' + esc(unitName(a.unit)) + (wk ? " · Week " + wk : "") + "</div>" +
+        '<div class="due-unit"><span class="unit-dot" style="--c:' + unitColor(a.unit) + '"></span>' + esc(unitName(a.unit)) + (wk ? " · Week " + wk : breakOf(a.due) ? " · " + esc(breakOf(a.due).name) : "") + "</div>" +
         '<span class="count">' + countdown(left) + "</span></div>";
     }
     var closed = assessments.filter(function (a) { return diffDays(parseDate(a.due), today) < 0; });
@@ -607,7 +610,12 @@ h1 {
     // Weeks
     var html = "";
     weeks.forEach(function (w) {
-      if (w.isBreak) { html += '<div class="break"><b>' + esc(w.br.name) + "</b><span>" + fmt(w.br.s) + " – " + fmt(w.br.e) + "</span><span>No classes</span></div>"; return; }
+      if (w.isBreak) {
+        var bDue = assessments.filter(function (a) { return breakOf(a.due) === w.br; });
+        html += '<div class="break"><b>' + esc(w.br.name) + "</b><span>" + fmt(w.br.s) + " – " + fmt(w.br.e) + "</span><span>No classes</span>" +
+          bDue.map(function (a) { return '<span class="break-due"><b>Due ' + fmt(parseDate(a.due)) + "</b> · " + esc(a.title) + "</span>"; }).join("") + "</div>";
+        return;
+      }
       var rows = [];
       classDays.forEach(function (k) {
         var d = addDays(w.mon, (k + 6) % 7), key = iso(d);
