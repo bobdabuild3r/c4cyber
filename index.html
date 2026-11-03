@@ -358,7 +358,7 @@ h1 {
       var parts = lines.map(function (l) {
         if (/^-{3,}$/.test(l)) return "<hr>";
         var m = l.match(/^(C\dT\d+L\d+\w*)(.*)$/);
-        if (!m) return linkify(l);
+        if (!m) return thmLink(l) || linkify(l);
         var lf = (unit && labFolders.filter(function (x) { return x.unit === unit; })[0]) || labFolders.filter(function (x) { return m[1].indexOf(x.prefix + "T") === 0; })[0];
         var code = "<code>" + esc(m[1]) + "</code>";
         if (lf) code = '<a class="lab-link" href="' + esc(lf.url) + '" target="_blank" rel="noopener" title="Open lab folder">' + code + "</a>";
@@ -374,6 +374,18 @@ h1 {
   }
 
   var labFolders = []; // [{unit, prefix, url}] from units with "labsFolder"
+  var thmRooms = {};   // normalised room name -> URL, from "tryhackme" in schedule.json
+  var normRoom = function (n) { return String(n).toLowerCase().replace(/\s+/g, " ").trim(); };
+  // "Room name (TryHackMe)" or "TryHackMe: Room name (notes)" -> the room name becomes a link
+  function thmLink(l) {
+    var m = l.match(/^(.+?)\s*\(TryHackMe\)\s*$/), pre = "", name, rest = "";
+    if (m) { name = m[1]; rest = " (TryHackMe)"; }
+    else if ((m = l.match(/^(TryHackMe:\s*)(.+?)(\s*\([^)]*\))?\s*$/))) { pre = m[1]; name = m[2]; rest = m[3] || ""; }
+    else return "";
+    var url = thmRooms[normRoom(name)];
+    if (!url) return "";
+    return esc(pre) + '<a class="thm-link" href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(name.replace(/\s+/g, " ")) + "</a>" + esc(rest);
+  }
   var filter = "all";
   try { filter = localStorage.getItem("cert4-filter") || "all"; } catch (e) {}
 
@@ -385,6 +397,7 @@ h1 {
     // Link to the unit's OneDrive folder (set "folder" on a unit in schedule.json); nothing shows until it is set
     // OneDrive links per unit: "labsFolder" and "assessmentFolder" in schedule.json (buttons stay hidden until set)
     var folderUrl = function (id, key) { var u = units[id], v = u && u[key || "labsFolder"]; return /^https:\/\//.test(v || "") ? v : ""; };
+    thmRooms = {}; Object.keys(data.tryhackme || {}).forEach(function (k) { if (/^https:\/\//.test(data.tryhackme[k])) thmRooms[normRoom(k)] = data.tryhackme[k]; });
     labFolders = (data.units || []).filter(function (u) { return folderUrl(u.id); }).map(function (u) { return { unit: u.id, prefix: u.labPrefix || "", url: folderUrl(u.id) }; });
     var folderLink = function (id, label, key) { var f = folderUrl(id, key); return f ? '<a class="folder-link" href="' + esc(f) + '" target="_blank" rel="noopener">' + label + ' <span aria-hidden="true">↗</span></a>' : ""; };
     var start = parseDate(c.start), end = parseDate(c.end);

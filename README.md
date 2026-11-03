@@ -53,6 +53,12 @@ Each unit in `schedule.json` has two links. Paste a OneDrive folder link between
 An empty link shows no button. Links must start with `https://`.
 Only students you have shared the folders with in OneDrive can open them.
 
+## TryHackMe room links
+
+`"tryhackme"` in `schedule.json` maps each room name to its URL. Any line written as `Room name (TryHackMe)` or `TryHackMe: Room name` becomes a link when the name is in that list (capitals and extra spaces don't matter).
+
+To add a room, add a line such as `"Hydra": "https://tryhackme.com/room/hydra",`.
+
 ## If the page says "formatting mistake"
 
 The site shows the line number where `schedule.json` broke. Usually it is a missing comma between items, a missing `"` quote, or a comma after the last item in a list. Open the file's **History** in GitHub to compare with the previous working version.
