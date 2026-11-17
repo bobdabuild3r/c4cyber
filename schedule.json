@@ -1,6 +1,6 @@
 {
-  "version": "2.0",
-  "updated": "2026-11-03",
+  "version": "2.1",
+  "updated": "2026-11-17",
   "course": {
     "title": "22603VIC - Certificate IV in Cyber Security",
     "intake": "Full-time · Semester 1, 2027",
@@ -299,7 +299,7 @@
       "unit": "pentest",
       "topics": "Topic 12- Interception and manipulation with web proxy\nTopic 13- Enumerating the web app",
       "activities": "C2T12L1- SpiderProxyIntercept\nC2T13L1- NiktoWebEnumeration",
-      "homework": "Burp Suite: Repeater (TryHackMe)"
+      "homework": "Burp Suite: Repeater (TryHackMe)\nCaido: The Basics (TryHackMe)"
     },
     {
       "date": "2027-03-25",
@@ -554,7 +554,8 @@
     "Bolt": "https://tryhackme.com/room/bolt",
     "OpenVAS": "https://tryhackme.com/room/openvas",
     "Easy Peasy": "https://tryhackme.com/room/easypeasyctf",
-    "Brooklyn Nine Nine": "https://tryhackme.com/room/brooklynninenine"
+    "Brooklyn Nine Nine": "https://tryhackme.com/room/brooklynninenine",
+    "Caido: The Basics": "https://tryhackme.com/room/caidobasics"
   },
   "linkNames": {
     "https://tryhackme.com/": "TryHackMe website",
