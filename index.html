@@ -785,11 +785,13 @@ h1 {
     document.getElementById("due-wrap").addEventListener("keydown", openDueRow);
     nd.addEventListener("click", function (e) { e.preventDefault(); history.replaceState(null, "", "#due"); show("due"); window.scrollTo({ top: 0 }); });
 
-    show(viewFromHash());
+    // Always open on the Delivery Schedule, whatever tab the link was copied from
+    if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+    show("schedule");
     // Keep the current week visible in the strip, and open the page at today's class during the course
     var curBtn = document.querySelector(".wk.cur");
     if (curBtn) { var s = document.getElementById("strip"); s.scrollLeft = curBtn.offsetLeft - s.clientWidth / 2 + curBtn.clientWidth / 2; }
-    if (viewFromHash() === "schedule" && current && today >= start) requestAnimationFrame(function () { goWeek(current, false); });
+    if (current && today >= start) requestAnimationFrame(function () { goWeek(current, false); });
   }
 
   // Back to top button: shows once the page is scrolled down
