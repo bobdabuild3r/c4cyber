@@ -183,6 +183,7 @@ h1 {
 .session.hl { background: var(--accent-soft); }
 .session.hl::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--accent); }
 .day { font-family: var(--f-mono); font-variant-numeric: tabular-nums; line-height: 1.15; }
+.u-short { text-transform: none; letter-spacing: 0; }
 .wk-tag { display: inline-block; margin-bottom: 6px; padding: 3px 6px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font: 600 10.5px/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
 .wk-short { display: none; }
 @media (max-width: 760px) { .wk-long { display: none; } .wk-short { display: inline; } }
@@ -360,6 +361,7 @@ h1 {
   function diffDays(a, b) { return Math.round((Date.UTC(a.getFullYear(), a.getMonth(), a.getDate()) - Date.UTC(b.getFullYear(), b.getMonth(), b.getDate())) / 86400000); }
   function fmt(d) { return DOW[d.getDay()] + " " + d.getDate() + " " + MON[d.getMonth()]; }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  var unitLabel = function (id) { return esc(id); };
   var cellWeek = null; // week number shown above each day while the weeks are drawn
   function dayCell(d) { return '<div class="day">' + (cellWeek ? '<span class="wk-tag"><span class="wk-long">Week </span><span class="wk-short">W</span>' + cellWeek + "</span>" : "") + '<span class="dow">' + DOW[d.getDay()] + '</span><span class="dnum">' + d.getDate() + '</span><span class="dmon">' + MON[d.getMonth()] + "</span></div>"; }
   function countdown(left) { return left < 0 ? (-left) + (left === -1 ? " day" : " days") + " past submission" : left === 0 ? "Due today" : left === 1 ? "Tomorrow" : "In " + left + " days"; }
@@ -445,7 +447,7 @@ h1 {
       if (!body) return;
       if (sg.type === "p" || !boxes) { html += renderPlain(body, unit); return; }
       var info = assessInfo(unit);
-      html += '<div class="assess"><div class="assess-h"><span>Assessment task</span>' + (info ? '<span class="assess-unit">' + esc(info.name) + "</span>" : "") + "</div>" +
+      html += '<div class="assess"><div class="assess-h"><span>Assessment task</span>' + (info ? '<span class="assess-unit">' + unitLabel(unit) + "</span>" : "") + "</div>" +
         body.split(/\n\s*\n/).map(function (b) { return "<p>" + b.split("\n").map(function (q) { return linkify(q.trim()); }).filter(Boolean).join("<br>") + "</p>"; }).join("") + "</div>";
     });
     return html;
@@ -489,6 +491,8 @@ h1 {
     var units = {}; (data.units || []).forEach(function (u) { units[u.id] = u; });
     var unitColor = function (id) { return "var(--u-" + (units[id] ? id : "general") + ")"; };
     var unitName = function (id) { return units[id] ? units[id].name : "General"; };
+    // Unit name plus its short form, e.g. "Fundamentals of Cyber Security (FoCS)" (short form keeps its own capitals)
+    unitLabel = function (id) { var u = units[id]; return esc(u ? u.name : "General") + (u && u.short ? ' <span class="u-short">(' + esc(u.short) + ")</span>" : ""); };
     // Link to the unit's OneDrive folder (set "folder" on a unit in schedule.json); nothing shows until it is set
     // OneDrive links per unit: "labsFolder" and "assessmentFolder" in schedule.json (buttons stay hidden until set)
     var folderUrl = function (id, key) { var u = units[id], v = u && u[key || "labsFolder"]; return /^https:\/\//.test(v || "") ? v : ""; };
@@ -577,7 +581,7 @@ h1 {
       return '<div class="due-row ' + cls + '" role="link" tabindex="0" data-week="' + (wk || "") + '" data-unit="' + esc(a.unit) + '">' +
         '<div class="due-date"><span class="m">' + DOW[d.getDay()] + '</span><span class="d">' + d.getDate() + '</span><span class="m">' + MON[d.getMonth()] + "</span></div>" +
         '<div><div class="due-title">' + esc(a.title) + "</div>" + (a.note ? '<div class="due-note">' + esc(a.note) + "</div>" : "") + folderLink(a.unit, "Assessment documents", "assessmentFolder") + "</div>" +
-        '<div class="due-unit"><span class="unit-dot" style="--c:' + unitColor(a.unit) + '"></span>' + esc(unitName(a.unit)) + (wk ? " · Week " + wk : breakOf(a.due) ? " · " + esc(breakOf(a.due).name) : "") + "</div>" +
+        '<div class="due-unit"><span class="unit-dot" style="--c:' + unitColor(a.unit) + '"></span>' + unitLabel(a.unit) + (wk ? " · Week " + wk : breakOf(a.due) ? " · " + esc(breakOf(a.due).name) : "") + "</div>" +
         '<span class="count">' + countdown(left) + "</span></div>";
     }
     var closed = assessments.filter(function (a) { return diffDays(parseDate(a.due), today) < 0; });
@@ -601,7 +605,7 @@ h1 {
     var used = {}; sessions.concat(assessments).forEach(function (s) { used[s.unit] = 1; });
     var chips = document.getElementById("chips");
     chips.innerHTML = '<button class="chip" type="button" data-f="all">All units</button>' + (data.units || []).filter(function (u) { return used[u.id] && u.id !== "general"; }).map(function (u) {
-      return '<button class="chip" type="button" data-f="' + esc(u.id) + '" style="--c:' + unitColor(u.id) + '" title="' + esc(u.codes || "") + '"><span class="dot"></span>' + esc(u.name) + "</button>";
+      return '<button class="chip" type="button" data-f="' + esc(u.id) + '" style="--c:' + unitColor(u.id) + '" title="' + esc(u.codes || "") + '"><span class="dot"></span>' + unitLabel(u.id) + "</button>";
     }).join("");
     if (c.reminder) { var r = document.getElementById("reminder"); r.innerHTML = "<b>Reminder:</b> " + esc(c.reminder); r.hidden = false; }
     document.getElementById("toolbar").hidden = false;
@@ -663,7 +667,7 @@ h1 {
             cols += '<div' + (has ? "" : ' class="col-empty"') + '><div class="col-h">' + p[0] + '</div>' + (has ? '<div class="txt">' + p[1] + "</div>" : '<div class="txt" style="color:var(--muted)">—</div>') + "</div>";
           });
           body += '<article class="session' + (hl ? " hl" : "") + '"' + (hl ? ' id="now"' : "") + ' data-unit="' + esc(s.unit) + '">' + dayCell(d) + "<div>" +
-            '<div class="s-head"><span class="unit-tag" style="--c:' + unitColor(s.unit) + '">' + esc(unitName(s.unit)) + "</span>" +
+            '<div class="s-head"><span class="unit-tag" style="--c:' + unitColor(s.unit) + '">' + unitLabel(s.unit) + "</span>" +
             (hl ? '<span class="pill">' + (hlIsToday ? "Today" : "Next class") + "</span>" : "") + partTag + folderLink(s.unit, "Lab files") + "</div>" +
             '<div class="cols">' + cols + "</div></div></article>";
         }
@@ -686,7 +690,7 @@ h1 {
       [["unit-folder", "labsFolder", "Lab files"], ["unit-assess", "assessmentFolder", "Assessment documents"]].forEach(function (x) {
         var el = document.getElementById(x[0]), fu = filter !== "all" ? folderUrl(filter, x[1]) : "";
         el.hidden = !fu;
-        if (fu) { el.href = fu; el.innerHTML = esc(unitName(filter)) + ": " + x[2] + ' <span aria-hidden="true">↗</span>'; }
+        if (fu) { el.href = fu; el.innerHTML = unitLabel(filter) + ": " + x[2] + ' <span aria-hidden="true">↗</span>'; }
       });
       document.querySelectorAll("#weeks [data-unit]").forEach(function (el) {
         var u = el.getAttribute("data-unit");

@@ -1,5 +1,5 @@
 {
-  "version": "2.5",
+  "version": "2.6",
   "updated": "2026-11-20",
   "course": {
     "title": "22603VIC - Certificate IV in Cyber Security",
@@ -25,6 +25,7 @@
     {
       "id": "fund",
       "name": "Fundamentals of Cyber Security",
+      "short": "FoCS",
       "codes": "VU23213, VU23214, VU23217",
       "labPrefix": "C1",
       "labsFolder": "https://tafensw-my.sharepoint.com/:f:/r/personal/pravesh_dahal2_tafensw_edu_au/Documents/2.%20Cert%20IV%20Cyber-%20Everything/2.%20Labs/1.%20Fundamentals%20of%20Cyber%20Security_Cloudlabs?d=wc6963d309e744415ad62d9a50c2dec5e&csf=1&web=1&e=MKbGI7",
@@ -33,6 +34,7 @@
     {
       "id": "pentest",
       "name": "Network and Web Pentesting",
+      "short": "NWPT",
       "codes": "VU23215, VU23222",
       "labPrefix": "C2",
       "labsFolder": "https://tafensw-my.sharepoint.com/:f:/r/personal/pravesh_dahal2_tafensw_edu_au/Documents/2.%20Cert%20IV%20Cyber-%20Everything/2.%20Labs/2.%20Network%20and%20Web%20Pentesting_Cloudlabs?d=w91251d1f37f34eb9872cbbccdfcbba2d&csf=1&web=1&e=1CRPhF",
@@ -41,6 +43,7 @@
     {
       "id": "nsda",
       "name": "Network Security and Data Analysis",
+      "short": "NSDA",
       "codes": "VU23216, VU23218",
       "labPrefix": "C3",
       "labsFolder": "https://tafensw-my.sharepoint.com/:f:/r/personal/pravesh_dahal2_tafensw_edu_au/Documents/2.%20Cert%20IV%20Cyber-%20Everything/2.%20Labs/3.%20Network%20Security%20and%20DataAnalysis_Cloudlabs?d=w00c800eaaa184b1e98069c0f657c522f&csf=1&web=1&e=87bNxr",
