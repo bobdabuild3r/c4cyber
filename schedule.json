@@ -1,5 +1,5 @@
 {
-  "version": "2.2",
+  "version": "2.3",
   "updated": "2026-11-20",
   "course": {
     "title": "22603VIC - Certificate IV in Cyber Security",
@@ -171,16 +171,16 @@
     {
       "date": "2027-02-09",
       "unit": "fund",
-      "topics": "Topic 4- Windows Operating System\nTopic 5- Linux Operating System (Part 1)\n------------\nHistory\nKernel & Shells\nDistributions\nFilesystem Hierarchical system(FHS)\nWorking with files",
-      "activities": "C1T5L1 - Files Linux\n\nComplete\n\nModule: Getting Started and Command Line from\nhttps://linuxjourney.com/",
-      "homework": "The Linux Command line for beginners:\nhttps://ubuntu.com/tutorials/command-line-for-beginners#1-overview\nOperating Systems: Introduction (TryHackMe)"
+      "topics": "Topic 6- Networking (Part 3)\n----------\nNumber Conversion\nSubnetting",
+      "activities": "Task 6 - Worksheet -IP Addresses and Subnetting\n\nhttps://learningcontent.cisco.com/games/binary/index.html\n\nhttps://www.subnetting.net/Subnetting.aspx?mode=practice",
+      "homework": ""
     },
     {
       "date": "2027-02-11",
       "unit": "fund",
-      "topics": "Topic 6- Networking (Part 3)\n----------\nNumber Conversion\nSubnetting",
-      "activities": "Task 6 - Worksheet -IP Addresses and Subnetting\n\nhttps://learningcontent.cisco.com/games/binary/index.html\n\nhttps://www.subnetting.net/Subnetting.aspx?mode=practice",
-      "homework": ""
+      "topics": "Topic 4- Windows Operating System\nTopic 5- Linux Operating System (Part 1)\n------------\nHistory\nKernel & Shells\nDistributions\nFilesystem Hierarchical system(FHS)\nWorking with files",
+      "activities": "C1T5L1 - Files Linux\n\nComplete\n\nModule: Getting Started and Command Line from\nhttps://linuxjourney.com/",
+      "homework": "The Linux Command line for beginners:\nhttps://ubuntu.com/tutorials/command-line-for-beginners#1-overview\nOperating Systems: Introduction (TryHackMe)"
     },
     {
       "date": "2027-02-15",
