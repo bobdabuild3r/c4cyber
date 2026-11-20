@@ -1,5 +1,5 @@
 {
-  "version": "2.6",
+  "version": "2.7",
   "updated": "2026-11-20",
   "course": {
     "title": "22603VIC - Certificate IV in Cyber Security",
@@ -66,7 +66,8 @@
     },
     {
       "id": "wit",
-      "name": "WIT units",
+      "name": "Self paced units",
+      "short": "WIT",
       "codes": "ICTICT443, BSBWHS309, VU23223",
       "labsFolder": "",
       "assessmentFolder": ""
