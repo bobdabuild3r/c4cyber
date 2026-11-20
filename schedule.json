@@ -1,5 +1,5 @@
 {
-  "version": "2.7",
+  "version": "2.8",
   "updated": "2026-11-20",
   "course": {
     "title": "22603VIC - Certificate IV in Cyber Security",
@@ -581,5 +581,112 @@
     "https://portswigger.net/web-security/sql-injection/lab-retrieve-hidden-data": "PortSwigger lab: SQL injection, retrieve hidden data",
     "https://portswigger.net/web-security/sql-injection/lab-login-bypass": "PortSwigger lab: SQL injection, login bypass",
     "https://www.linkedin.com/learning/incident-handling-process-cybersecurity-labs-powered-by-hack-the-box?u=57684225": "LinkedIn Learning: Incident Handling Process (Cybersecurity Labs powered by Hack The Box)"
-  }
+  },
+  "clusters": [
+    {
+      "name": "Fundamentals of Cyber Security",
+      "short": "FoCS",
+      "unit": "fund",
+      "units": [
+        {
+          "code": "VU23213",
+          "title": "Utilise basic network concepts and protocols required in cyber security"
+        },
+        {
+          "code": "VU23214",
+          "title": "Configure and secure networked end points"
+        },
+        {
+          "code": "VU23217",
+          "title": "Recognise the need for cyber security in an organisation"
+        }
+      ]
+    },
+    {
+      "name": "Network and Web Penetration Testing",
+      "short": "NWPT",
+      "unit": "pentest",
+      "units": [
+        {
+          "code": "VU23215",
+          "title": "Test concepts and procedures for cyber security"
+        },
+        {
+          "code": "VU23222",
+          "title": "Expose website security vulnerabilities"
+        }
+      ]
+    },
+    {
+      "name": "Network Security and Data Analysis",
+      "short": "NSDA",
+      "unit": "nsda",
+      "units": [
+        {
+          "code": "VU23216",
+          "title": "Perform basic cyber security data analysis"
+        },
+        {
+          "code": "VU23218",
+          "title": "Implement network security infrastructure for an organisation"
+        }
+      ]
+    },
+    {
+      "name": "Cyber Project",
+      "unit": "project",
+      "units": [
+        {
+          "code": "BSBINS401",
+          "title": "Analyse and present research information"
+        },
+        {
+          "code": "VU23219",
+          "title": "Manage the security infrastructure for the organisation"
+        },
+        {
+          "code": "VU23220",
+          "title": "Develop and carry out a cyber security industry project"
+        },
+        {
+          "code": "VU23221",
+          "title": "Evaluate and test an incident response plan for an enterprise"
+        }
+      ]
+    },
+    {
+      "name": "Automate Penetration Testing",
+      "unit": "automate",
+      "units": [
+        {
+          "code": "ICTPRG434",
+          "title": "Automate Processes"
+        },
+        {
+          "code": "VU23226",
+          "title": "Test concepts and procedures for cyber exploitation"
+        }
+      ]
+    },
+    {
+      "name": "Working in IT and Policy",
+      "short": "WIT",
+      "unit": "wit",
+      "selfPaced": true,
+      "units": [
+        {
+          "code": "ICTICT443",
+          "title": "Work collaboratively in the ICT industry"
+        },
+        {
+          "code": "VU23223",
+          "title": "Apply cyber security legislation, privacy and ethical practices"
+        },
+        {
+          "code": "BSBWHS309",
+          "title": "Contribute effectively to WHS communication and consultation processes"
+        }
+      ]
+    }
+  ]
 }

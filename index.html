@@ -247,6 +247,29 @@ h1 {
 .break-dues .row-note:first-child { border-top: 0; }
 .endmark { text-align: center; padding: 18px; font: 800 20px/1.2 var(--f-display); font-stretch: 85%; color: var(--muted); }
 
+/* Units tab */
+.units-wrap { display: grid; gap: 14px; margin-top: 18px; }
+.units-intro { color: var(--muted); font-size: 14px; }
+.units-table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.units-table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 14.5px; }
+.units-table thead th { text-align: left; font: 600 11px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--surface-2); }
+.units-table td, .units-table .cl-name { padding: 11px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.units-table tbody tr:last-child td { border-bottom: 0; }
+.units-table .cl-name { text-align: left; width: 34%; font: 700 15px/1.35 var(--f-display); font-stretch: 92%; box-shadow: inset 5px 0 0 var(--c); background: var(--surface-2); vertical-align: middle; }
+.units-table .cl-name > span:first-child { display: block; }
+.units-table .u-code { font: 600 13px/1.5 var(--f-mono); color: var(--c); white-space: nowrap; width: 1%; }
+.units-table tr.self-paced td { font-style: italic; }
+@media (max-width: 640px) {
+  .units-table { min-width: 0; }
+  .units-table thead { display: none; }
+  .units-table, .units-table tbody { display: block; }
+  .units-table tr { display: grid; grid-template-columns: auto minmax(0, 1fr); }
+  .units-table .cl-name { grid-column: 1 / -1; display: block; width: auto; border-bottom: 1px solid var(--line); }
+  .units-table td { display: block; }
+  .units-table .u-code { width: auto; }
+}
+.sp-pill { display: inline-block; margin-top: 6px; font: 600 11px/1 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; color: var(--u-wit); border: 1px solid var(--u-wit); border-radius: 5px; padding: 4px 6px; font-style: normal; }
+
 /* Due dates tab */
 .due-wrap { display: grid; gap: 22px; margin-top: 18px; }
 .due-wrap h2 { margin: 0 0 10px; font: 800 22px/1.1 var(--f-display); font-stretch: 85%; }
@@ -321,6 +344,7 @@ h1 {
   <div class="alert" id="alert" role="status" hidden></div>
   <div class="bar" id="bar" hidden>
     <div class="tabs" role="tablist">
+      <button class="tab" type="button" role="tab" id="tab-units" data-view="units" aria-controls="view-units">Units</button>
       <button class="tab" type="button" role="tab" id="tab-schedule" data-view="schedule" aria-controls="view-schedule">Delivery Schedule</button>
       <button class="tab" type="button" role="tab" id="tab-due" data-view="due" aria-controls="view-due">Assessment due dates <span class="n" id="due-n"></span></button>
       <a class="next-due" id="next-due" href="#due" hidden></a>
@@ -338,6 +362,10 @@ h1 {
     </div>
     <p class="legend" id="legend" hidden><span class="assess-chip">Assessment task</span> These boxes show the part of your unit assessment you can complete once you have finished that class.</p>
     <div class="weeks" id="weeks"><div class="notice">Loading the schedule…</div></div>
+  </section>
+
+  <section id="view-units" role="tabpanel" aria-labelledby="tab-units" hidden>
+    <div class="units-wrap" id="units-wrap"></div>
   </section>
 
   <section id="view-due" role="tabpanel" aria-labelledby="tab-due" hidden>
@@ -590,6 +618,20 @@ h1 {
     if (closed.length) dueHtml += "<div><h2>Closed</h2><div class=\"due-table\">" + closed.map(dueRow).join("") + "</div></div>";
     document.getElementById("due-wrap").innerHTML = dueHtml;
 
+    // Units tab: clusters and their units (from "clusters" in schedule.json)
+    var uHtml = '<div class="units-intro">Units delivered in ' + esc(c.title || "this course") + ", grouped by cluster.</div>";
+    uHtml += '<div class="units-table-wrap"><table class="units-table"><thead><tr><th>Cluster</th><th>Unit code</th><th>Description</th></tr></thead><tbody>';
+    (data.clusters || []).forEach(function (cl) {
+      (cl.units || []).forEach(function (un, i) {
+        uHtml += '<tr class="' + (cl.selfPaced ? "self-paced" : "") + '" style="--c:' + unitColor(cl.unit) + '">' +
+          (i === 0 ? '<th scope="rowgroup" rowspan="' + cl.units.length + '" class="cl-name"><span>' + esc(cl.name) + (cl.short ? ' <span class="u-short">(' + esc(cl.short) + ")</span>" : "") + "</span>" +
+            (cl.selfPaced ? '<span class="sp-pill">Online self-paced</span>' : "") + "</th>" : "") +
+          '<td class="u-code">' + esc(un.code) + "</td><td>" + esc(un.title) + "</td></tr>";
+      });
+    });
+    uHtml += "</tbody></table></div>";
+    document.getElementById("units-wrap").innerHTML = uHtml;
+
     // Week strip
     var strip = "";
     weeks.forEach(function (w) {
@@ -714,10 +756,11 @@ h1 {
       document.querySelectorAll(".tab").forEach(function (t) { t.setAttribute("aria-selected", t.getAttribute("data-view") === view ? "true" : "false"); });
       document.getElementById("view-schedule").hidden = view !== "schedule";
       document.getElementById("view-due").hidden = view !== "due";
+      document.getElementById("view-units").hidden = view !== "units";
       document.getElementById("strip").hidden = view !== "schedule";
     }
     function goWeek(nw, smooth) {
-      if (location.hash === "#due") { history.replaceState(null, "", "#schedule"); }
+      if (location.hash === "#due" || location.hash === "#units") { history.replaceState(null, "", "#schedule"); }
       show("schedule");
       var el = document.getElementById("week-" + nw); if (!el) return;
       el.open = true; el.classList.remove("is-hidden");
@@ -729,7 +772,8 @@ h1 {
     document.querySelectorAll(".tab").forEach(function (t) {
       t.addEventListener("click", function () { var v = t.getAttribute("data-view"); history.replaceState(null, "", "#" + v); show(v); window.scrollTo({ top: 0 }); });
     });
-    window.addEventListener("hashchange", function () { show(location.hash === "#due" ? "due" : "schedule"); });
+    var viewFromHash = function () { return location.hash === "#due" ? "due" : location.hash === "#units" ? "units" : "schedule"; };
+    window.addEventListener("hashchange", function () { show(viewFromHash()); });
     document.getElementById("strip").addEventListener("click", function (e) { var b = e.target.closest(".wk"); if (b) goWeek(b.getAttribute("data-week"), true); });
     function openDueRow(e) {
       if (e.target.closest("a")) return; // let the OneDrive link open
@@ -741,11 +785,11 @@ h1 {
     document.getElementById("due-wrap").addEventListener("keydown", openDueRow);
     nd.addEventListener("click", function (e) { e.preventDefault(); history.replaceState(null, "", "#due"); show("due"); window.scrollTo({ top: 0 }); });
 
-    show(location.hash === "#due" ? "due" : "schedule");
+    show(viewFromHash());
     // Keep the current week visible in the strip, and open the page at today's class during the course
     var curBtn = document.querySelector(".wk.cur");
     if (curBtn) { var s = document.getElementById("strip"); s.scrollLeft = curBtn.offsetLeft - s.clientWidth / 2 + curBtn.clientWidth / 2; }
-    if (location.hash !== "#due" && current && today >= start) requestAnimationFrame(function () { goWeek(current, false); });
+    if (viewFromHash() === "schedule" && current && today >= start) requestAnimationFrame(function () { goWeek(current, false); });
   }
 
   // Back to top button: shows once the page is scrolled down
