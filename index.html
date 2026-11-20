@@ -183,6 +183,9 @@ h1 {
 .session.hl { background: var(--accent-soft); }
 .session.hl::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--accent); }
 .day { font-family: var(--f-mono); font-variant-numeric: tabular-nums; line-height: 1.15; }
+.wk-tag { display: inline-block; margin-bottom: 6px; padding: 3px 6px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font: 600 10.5px/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.wk-short { display: none; }
+@media (max-width: 760px) { .wk-long { display: none; } .wk-short { display: inline; } }
 .day .dow { display: block; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .day .dnum { display: block; font-size: 26px; font-weight: 600; }
 .day .dmon { display: block; font-size: 12px; color: var(--muted); }
@@ -357,7 +360,8 @@ h1 {
   function diffDays(a, b) { return Math.round((Date.UTC(a.getFullYear(), a.getMonth(), a.getDate()) - Date.UTC(b.getFullYear(), b.getMonth(), b.getDate())) / 86400000); }
   function fmt(d) { return DOW[d.getDay()] + " " + d.getDate() + " " + MON[d.getMonth()]; }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
-  function dayCell(d) { return '<div class="day"><span class="dow">' + DOW[d.getDay()] + '</span><span class="dnum">' + d.getDate() + '</span><span class="dmon">' + MON[d.getMonth()] + "</span></div>"; }
+  var cellWeek = null; // week number shown above each day while the weeks are drawn
+  function dayCell(d) { return '<div class="day">' + (cellWeek ? '<span class="wk-tag"><span class="wk-long">Week </span><span class="wk-short">W</span>' + cellWeek + "</span>" : "") + '<span class="dow">' + DOW[d.getDay()] + '</span><span class="dnum">' + d.getDate() + '</span><span class="dmon">' + MON[d.getMonth()] + "</span></div>"; }
   function countdown(left) { return left < 0 ? (-left) + (left === -1 ? " day" : " days") + " past submission" : left === 0 ? "Due today" : left === 1 ? "Tomorrow" : "In " + left + " days"; }
 
   // "Today" (add ?today=2027-03-03 to the URL to preview another date)
@@ -613,6 +617,7 @@ h1 {
     // Weeks
     var html = "";
     weeks.forEach(function (w) {
+      cellWeek = w.isBreak ? null : w.n;
       if (w.isBreak) {
         var bDue = assessments.filter(function (a) { return breakOf(a.due) === w.br; });
         html += '<div class="break"><b>' + esc(w.br.name) + "</b><span>" + fmt(w.br.s) + " – " + fmt(w.br.e) + "</span><span>No classes</span>" +
@@ -669,6 +674,7 @@ h1 {
         '<summary><span class="week-no">Week ' + w.n + '</span><span class="week-range">' + w.mon.getDate() + " " + MON[w.mon.getMonth()] + " – " + fr.getDate() + " " + MON[fr.getMonth()] + '</span><span class="week-flags">' + flags + '<span class="chev" aria-hidden="true"></span></span></summary>' +
         '<div class="week-body">' + body + "</div></details>";
     });
+    cellWeek = null;
     html += '<div class="endmark">Course ends ' + fmt(end) + " " + end.getFullYear() + "</div>";
     document.getElementById("weeks").innerHTML = html;
     document.getElementById("bar").hidden = false;
